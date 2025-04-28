@@ -7,11 +7,8 @@ import java.sql.*;
 
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.sql.DriverManager;
 import java.util.Properties;
 
@@ -22,7 +19,10 @@ import java.util.Properties;
 
 
 
-public class HelloApplication extends Application {
+public class Main extends Application {
+    private ResultSet rs;
+
+
     @Override
     public void start(Stage stage) throws Exception {
 
@@ -51,7 +51,7 @@ public class HelloApplication extends Application {
             /// Aluetetaan lysely
             Statement st = con.createStatement();
             /// Haetaan kyselyn vastaukset anetulla lauseella
-            ResultSet rs = st.executeQuery(sql);
+            rs = st.executeQuery(sql);
 
             //Käydään rivehä niin pitkän kunnes kaikki haetut arviot on käyty läpi
             //Eka rivi tulee skipata koska siinäö ei ole arvoja jota haetaan taulusta
