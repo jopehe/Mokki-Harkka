@@ -21,13 +21,6 @@ import javafx.stage.Stage;
 import java.sql.DriverManager;
 import java.util.Properties;
 
-// alustava sopimus esitutkimuksesta
-// alustava projektisuunnitelma esitutkimuksesta
-// dokumentointisuunnitelma esitutkimuksesta
-// mikä tahansa suunnitelma määrittelystä
-
-
-
 public class Main extends Application {
     private ResultSet rs;
 
@@ -39,6 +32,9 @@ public class Main extends Application {
 
 
         MokkiHallinta mokkit = new MokkiHallinta();
+        AsiakasHallinta asiakas = new AsiakasHallinta();
+        VarausHallinta varaus = new VarausHallinta();
+        LaskuHallinta lasku = new LaskuHallinta();
 
         rootLayout = new BorderPane();
 
@@ -50,20 +46,20 @@ public class Main extends Application {
 
 
         asiakatB.setOnAction(e ->{
-            rootLayout.setCenter(getAsiakasLayout()
+            rootLayout.setCenter(asiakas.getLayout()
             );
         });
 
         mokkiB.setOnAction(e ->{
-            rootLayout.setCenter(mokkit.getView()
+            rootLayout.setCenter(mokkit.getLayout()
             );
         });
         varausB.setOnAction(e ->{
-            rootLayout.setCenter(getVarausLayout()
+            rootLayout.setCenter(varaus.getLayout()
             );
         });
         laskuB.setOnAction(e ->{
-            rootLayout.setCenter(getLaskuLayout()
+            rootLayout.setCenter(lasku.getLayout()
             );
         });
         raportiB.setOnAction(e ->{
@@ -76,7 +72,7 @@ public class Main extends Application {
         rootLayout.setTop(tobBar);
 
 
-        Scene scene = new Scene(rootLayout, 600, 800);
+        Scene scene = new Scene(rootLayout, 800, 800);
         stage.setMinWidth(600);
         stage.setMaxHeight(800);
         stage.setMaxWidth(1000);

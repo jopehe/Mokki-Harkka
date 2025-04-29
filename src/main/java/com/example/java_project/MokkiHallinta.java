@@ -114,8 +114,22 @@ public class MokkiHallinta extends  Application{
         Label kylpyhuoneLable = new Label("Kylpyhuone on: ");
 
 
-
         Button tallennaButton = new Button("Tallenna");
+
+
+
+
+        Button lisaaMokki = new Button("Lisaa mökki");
+        Button muokkaaMokkia = new Button("Muokkaa mökkiä");
+        Button poistaMokki = new Button("Poista mökki");
+
+
+
+        HBox topLayout = new HBox(1, lisaaMokki, muokkaaMokkia, poistaMokki);
+
+
+
+
 
 
         keittioOn = new RadioButton();
@@ -123,6 +137,7 @@ public class MokkiHallinta extends  Application{
 
         //
         VBox rightSide = new VBox(1,
+                topLayout,
                 idLabel, mokkiIdAsetus,
                 osoiteLabel, osoiteAsetus,
                 hintaLabel, hintaAsetus,
@@ -191,17 +206,7 @@ public class MokkiHallinta extends  Application{
         primaryStage.show();
     }
 
-    public HBox getView(){
-        // Vasemman puolen komponentit (lomake)
-        Label nameLabel = new Label("Nimi:");
-        TextField nameField = new TextField();
-        Button addButton = new Button("Lisää käyttäjä");
-        Button emptyButton = new Button("Tyhjennä");
-
-        //VBox formBox = new VBox(10, nameLabel, nameField, addButton, emptyButton);
-        //formBox.setPrefWidth(200);
-
-
+    public HBox getLayout(){
 
         Label idLabel = new Label("ID: ");
         mokkiIdAsetus = new TextField("");
@@ -234,8 +239,20 @@ public class MokkiHallinta extends  Application{
                 kylpyhuoneLable,kylpyhuoneOn);
 
 
+
+
+
+        Button lisaaMokki = new Button("Lisaa mökki");
+        Button muokkaaMokkia = new Button("Muokkaa mökkiä");
+        Button poistaMokki = new Button("Poista mökki");
+
+        HBox topLayout = new HBox(1, lisaaMokki, muokkaaMokkia, poistaMokki);
+
+
+
         //
         VBox rightSide = new VBox(1,
+                topLayout,
                 idLabel, mokkiIdAsetus,
                 osoiteLabel, osoiteAsetus,
                 hintaLabel, hintaAsetus,
@@ -247,18 +264,9 @@ public class MokkiHallinta extends  Application{
 
         rightSide.setPrefWidth(500);
 
-
-
-
-
-
         ListView<String> mokkiList = new ListView<>();
         VBox leftSide = new VBox(10, mokkiList);
         leftSide.setPrefWidth(600);
-
-
-
-
 
 
         tallennaButton.setOnAction(e ->{
@@ -275,25 +283,6 @@ public class MokkiHallinta extends  Application{
         });
 
 
-
-        // Oikean puolen komponentit (käyttäjälista)
-        //ListView<String> userList = new ListView<>();
-        // userList.setPrefWidth(200);
-
-
-        /*
-        // Lisääminen listaan napista
-        addButton.setOnAction(e -> {
-            String name = nameField.getText();
-            if (!name.isEmpty()) {
-                userList.getItems().add(name);
-                nameField.clear();
-            }
-        });
-
-        emptyButton.setOnAction(e -> {
-             userList.getItems().clear();
-        });*/
 
         // Pääasettelu
         HBox mainLayout = new HBox(20, rightSide, leftSide);
