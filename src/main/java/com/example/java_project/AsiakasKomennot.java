@@ -1,4 +1,4 @@
 package com.example.java_project;
 
-public class AsiakasDAO {
+public class AsiakasKomennot {
 }

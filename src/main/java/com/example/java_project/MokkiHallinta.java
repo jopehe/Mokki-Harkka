@@ -275,11 +275,8 @@ public class MokkiHallinta extends  Application{
             String hintaVal = hintaAsetus.getText();
             String kokoVal = kokoAsetus.getText();
             String huoneLkVal = huoneLkmAsetus.getText();
-
             boolean onKylpyhuoneValittu = kylpyhuoneOn.isSelected();
             boolean onKeittioValittu = keittioOn.isSelected();
-
-
         });
 
 
