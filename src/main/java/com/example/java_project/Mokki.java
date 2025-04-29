@@ -6,7 +6,6 @@ package com.example.java_project;
 public class Mokki {
     private int mokki;
     private String osoite;
-    private String kuvaus;
     private String hinta;
     private String koko;
     private int huoneLK;
@@ -17,7 +16,7 @@ public class Mokki {
     public static void main(String[] args) {
 
 
-        Mokki mok = new Mokki(1, "Mäntymäki 11", "Hieno pieni mökki", "20.50e", "20a", 2, true, false);
+        Mokki mok = new Mokki(1, "Mäntymäki 11", "20.50e", "20a", 2, true, false);
 
 
 
@@ -31,7 +30,6 @@ public class Mokki {
         return
             "Mökkin id: " + mokki +
             "\nOsoite: " + osoite +
-            "\nKuvaus: " + kuvaus +
             "\nHinta: " + hinta +
             "\nKoko: " + koko +
             "\nHuoneiden lukumäärä: " + huoneLK +
@@ -45,7 +43,6 @@ public class Mokki {
     public Mokki(){
         mokki = -1;
         osoite = "";
-        kuvaus = "";
         hinta = "";
         koko = "";
         huoneLK = -1;
@@ -64,10 +61,9 @@ public class Mokki {
      * @param keittio_ on boolean
      * @param kylpyhuone_ on boolean
      */
-    public Mokki(int mokki_, String osoite_, String kuvaus_, String hinta_, String koko_, int huoneLK_, boolean keittio_, boolean kylpyhuone_){
+    public Mokki(int mokki_, String osoite_, String hinta_, String koko_, int huoneLK_, boolean keittio_, boolean kylpyhuone_){
         mokki = mokki_;
         osoite = osoite_;
-        kuvaus = kuvaus_;
         hinta = hinta_;
         koko = koko_;
         huoneLK = huoneLK_;
@@ -89,11 +85,6 @@ public class Mokki {
      */
     public String getOsoite() { return  osoite; }
 
-    /**
-     * Kuvaus mokkista
-     * @return string kuvaus mokkista
-     */
-    public String getKuvaus() { return  kuvaus; }
 
     /**
      * Palauttaa mokkin hinnan
@@ -138,11 +129,6 @@ public class Mokki {
      */
     public void setOsoite(String osoite_) {osoite = osoite_;}
 
-    /**
-     * Asettaa kuvauksen mokille
-     * @param kuvaus_ string arvo
-     */
-    public void setKuvaus(String kuvaus_) {kuvaus = kuvaus_;}
 
     /**
      * Settaa hinnan mokille
