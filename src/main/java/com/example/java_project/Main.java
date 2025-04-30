@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 
-
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -21,12 +20,27 @@ import javafx.stage.Stage;
 import java.sql.DriverManager;
 import java.util.Properties;
 
+/**
+ * Main scripti sisältää ohjelman aloitukseen tarvittavat järjestelmät
+ */
 public class Main extends Application {
     private ResultSet rs;
-
-
     private BorderPane rootLayout;
 
+
+    /**
+     *
+     * @param args
+     */
+    public static void main(String[] args) {
+        launch();
+    }
+
+    /**
+     *
+     * @param stage
+     * @throws Exception
+     */
     @Override
     public void start(Stage stage) throws Exception {
 
@@ -78,15 +92,67 @@ public class Main extends Application {
         stage.setMaxWidth(1000);
         stage.setMaxHeight(1200);
 
-
         stage.setTitle("Mokki varaus ohjelma");
         stage.setScene(scene);
         stage.show();
-
     }
 
 
-    public void haeDataa(){
+    /**
+     * palauttaa asiakas näkymän
+     * @return
+     */
+    public HBox getAsiakasLayout(){
+        HBox layout = new HBox();
+        layout.getChildren().add(new Button("ASIAKAS VIEW"));
+        return layout;
+    }
+
+    /**
+     * palauttaa mökit näkymän
+     * @return
+     */
+    public Pane getMokkiLayout(){
+        VBox layout = new VBox();
+        layout.getChildren().add(new Button("MÖKKI VIEW"));
+        return layout;
+    }
+
+    /**
+     * Palauttaa varaus näkymän
+     * @return
+     */
+    public Pane getVarausLayout(){
+        VBox layout = new VBox();
+        layout.getChildren().add(new Button("VARAUS VIEW"));
+        return layout;
+    }
+
+    /**
+     * Palauttaa lasku näkymän
+     * @return
+     */
+    public Pane getLaskuLayout(){
+        VBox layout = new VBox();
+        layout.getChildren().add(new Button("LASKU VIEW"));
+        return layout;
+    }
+
+    /**
+     * Palautta raportointi näkymän
+     * @return
+     */
+    public Pane getRaportiLayout(){
+        VBox layout = new VBox();
+        layout.getChildren().add(new Button("RAPORTTI VIEW"));
+        return layout;
+    }
+
+
+    /**
+     * Testi methodi jonka avulla yhteys tietokantaan tehdään
+     */
+    public void haeDataaTEST(){
 
         try {
 
@@ -143,39 +209,4 @@ public class Main extends Application {
         }
     }
 
-
-    public HBox getAsiakasLayout(){
-        HBox layout = new HBox();
-        layout.getChildren().add(new Button("ASIAKAS VIEW"));
-        return layout;
-    }
-
-    public Pane getMokkiLayout(){
-        VBox layout = new VBox();
-        layout.getChildren().add(new Button("MÖKKI VIEW"));
-        return layout;
-    }
-
-    public Pane getVarausLayout(){
-        VBox layout = new VBox();
-        layout.getChildren().add(new Button("VARAUS VIEW"));
-        return layout;
-    }
-
-    public Pane getLaskuLayout(){
-        VBox layout = new VBox();
-        layout.getChildren().add(new Button("LASKU VIEW"));
-        return layout;
-    }
-
-    public Pane getRaportiLayout(){
-        VBox layout = new VBox();
-        layout.getChildren().add(new Button("RAPORTTI VIEW"));
-        return layout;
-    }
-
-
-    public static void main(String[] args) {
-        launch();
-    }
 }

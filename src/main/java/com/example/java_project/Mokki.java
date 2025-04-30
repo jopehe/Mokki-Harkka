@@ -2,6 +2,9 @@ package com.example.java_project;
 
 /**
  * Sisältää tiedot mitä yksi mökki olio sisältää
+ * Author: Joel Heiskanen
+ * Date: 28.4.2025
+ * Version: 1.0
  */
 public class Mokki {
     private int mokki;

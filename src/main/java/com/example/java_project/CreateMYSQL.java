@@ -5,6 +5,13 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import  java.sql.Connection;
 
+
+/**
+ * Scripti sisältää erillaisia toimintoja joita tietokannan luomeseen/poistamisen voidaan käyttää
+ * Author: Joel Heiskanen
+ * Date: 29.4.2025
+ * Version: 1.0
+ */
 public class CreateMYSQL extends Application {
     private ResultSet rs;
 

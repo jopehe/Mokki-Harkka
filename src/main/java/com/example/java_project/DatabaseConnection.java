@@ -7,6 +7,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
 
+/**
+ * Scriptin avulla voidaan luoda yhteys tietokantaan
+ * Author: Joel Heiskanen
+ * Date: 29.4.2025
+ * Version: 1.0
+ */
 public class DatabaseConnection {
     public Connection dataBaseLink;
 
@@ -62,6 +68,7 @@ public class DatabaseConnection {
         String databasePassword = prop.getProperty("db.password");
         String url = prop.getProperty("db.url");
 
+        ///Hakea titokannan annetulla paremterilla
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
             dataBaseLink = DriverManager.getConnection(url, databaseUser, databasePassword);
@@ -69,6 +76,7 @@ public class DatabaseConnection {
         } catch (Exception E){
             System.out.println("Exeption: " + E);
         }
+        /// Palauttaa tietokannan yhteyden
         return dataBaseLink;
     }
 }
