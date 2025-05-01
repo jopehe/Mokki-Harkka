@@ -238,10 +238,6 @@ public class MokkiHallinta extends  Application{
                 keittioLable,keittioOn,
                 kylpyhuoneLable,kylpyhuoneOn);
 
-
-
-
-
         Button lisaaMokki = new Button("Lisaa mökki");
         Button muokkaaMokkia = new Button("Muokkaa mökkiä");
         Button poistaMokki = new Button("Poista mökki");
@@ -250,8 +246,8 @@ public class MokkiHallinta extends  Application{
 
 
 
-        //
-        VBox rightSide = new VBox(1,
+        /// Asettaa näkymän  näytön vasemalle puolelle
+        VBox left_Side = new VBox(1,
                 topLayout,
                 idLabel, mokkiIdAsetus,
                 osoiteLabel, osoiteAsetus,
@@ -262,13 +258,14 @@ public class MokkiHallinta extends  Application{
                 tallennaButton);
 
 
-        rightSide.setPrefWidth(500);
+        left_Side.setPrefWidth(500);
 
         ListView<String> mokkiList = new ListView<>();
-        VBox leftSide = new VBox(10, mokkiList);
-        leftSide.setPrefWidth(600);
+        VBox right_Side = new VBox(10, mokkiList);
+        right_Side.setPrefWidth(600);
 
 
+        /// Tallentaa tiedot tietokantaan anetujen textialueiden arvoilla
         tallennaButton.setOnAction(e ->{
 
             String osoiteVal = osoiteAsetus.getText();
@@ -282,7 +279,7 @@ public class MokkiHallinta extends  Application{
 
 
         // Pääasettelu
-        HBox mainLayout = new HBox(20, rightSide, leftSide);
+        HBox mainLayout = new HBox(20, left_Side, right_Side);
         mainLayout.setPadding(new Insets(20));
         mainLayout.setPrefSize(1920, 1080);
 

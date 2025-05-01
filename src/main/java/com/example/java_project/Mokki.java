@@ -9,8 +9,8 @@ package com.example.java_project;
 public class Mokki {
     private int mokki;
     private String osoite;
-    private String hinta;
-    private String koko;
+    private Double hinta;
+    private Double koko;
     private int huoneLK;
     private boolean keittio;
     private boolean kylpyhuone;
@@ -19,7 +19,7 @@ public class Mokki {
     public static void main(String[] args) {
 
 
-        Mokki mok = new Mokki(1, "Mäntymäki 11", "20.50e", "20a", 2, true, false);
+        Mokki mok = new Mokki(1, "Mäntymäki 11", 20.50, 16.00, 2, true, false);
 
 
 
@@ -46,8 +46,8 @@ public class Mokki {
     public Mokki(){
         mokki = -1;
         osoite = "";
-        hinta = "";
-        koko = "";
+        hinta = 0.0;
+        koko = 0.0;
         huoneLK = -1;
         keittio = false;
         kylpyhuone = false;
@@ -57,14 +57,13 @@ public class Mokki {
      * Alustaja mmökille kaikilla sille tarvittavilla parametreillä
      * @param mokki_ on int id arvo
      * @param osoite_ on string
-     * @param kuvaus_ on string
-     * @param hinta_ on string
-     * @param koko_ on string
+     * @param hinta_ on double
+     * @param koko_ on double
      * @param huoneLK_ on int arvo
      * @param keittio_ on boolean
      * @param kylpyhuone_ on boolean
      */
-    public Mokki(int mokki_, String osoite_, String hinta_, String koko_, int huoneLK_, boolean keittio_, boolean kylpyhuone_){
+    public Mokki(int mokki_, String osoite_, Double hinta_, Double koko_, int huoneLK_, boolean keittio_, boolean kylpyhuone_){
         mokki = mokki_;
         osoite = osoite_;
         hinta = hinta_;
@@ -93,13 +92,13 @@ public class Mokki {
      * Palauttaa mokkin hinnan
      * @return string hinta
      */
-    public String getHinta() { return  hinta; }
+    public Double getHinta() { return  hinta; }
 
     /**
      * Palauttaa mokkin koon
      * @return string koko mokkille
      */
-    public String getKoko() { return  koko; }
+    public Double getKoko() { return  koko; }
 
     /**
      * Palauttaa huoneiden lukumäärän
@@ -137,13 +136,13 @@ public class Mokki {
      * Settaa hinnan mokille
      * @param hinta_ on string arvo
      */
-    public void setHinta(String hinta_) { hinta = hinta_;}
+    public void setHinta(Double hinta_) { hinta = hinta_;}
 
     /**
      * Asettaa koon asunnolle
      * @param koko_ om string arvo
      */
-    public void setKoko(String koko_) { koko = koko_; }
+    public void setKoko(Double koko_) { koko = koko_; }
 
     /**
      * Asettaa lukumäärän huoneita
