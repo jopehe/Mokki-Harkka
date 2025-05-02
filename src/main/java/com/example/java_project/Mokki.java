@@ -73,6 +73,13 @@ public class Mokki {
         kylpyhuone = kylpyhuone_;
     }
 
+    /**
+     * Palauttaa string arvon jossa on kaikki mökki olion tiedon
+     * @return palautettu string arvo
+     */
+    public String getString(){
+        return mokki + ", " + osoite + ", " + hinta + ", " + koko + ", " + huoneLK + ", " + keittio + ", " + kylpyhuone;
+    }
 
 
     /**

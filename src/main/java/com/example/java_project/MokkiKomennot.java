@@ -121,7 +121,7 @@ public class MokkiKomennot extends Application {
 
     /**
      * Palauttaa määrän yhdistettyjä tauluja joita on annetuun id arvoon
-     * @paran id on arvo mökille johin yhdistettyjen taulujen määrää haetaan
+     * @paran id on arvo mökille joihin yhdistettyjen taulujen määrää haetaan
      * @return palauttaa luku määrän tauluja jotka on yhdistetty
     */
     private static int getConnectionAmount(int id){
