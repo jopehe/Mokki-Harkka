@@ -158,13 +158,20 @@ public class MokkiKomennot extends Application {
             Connection dbconection = connection.getDatabaseConnection();
             Statement dbstatement = dbconection.createStatement();
 
-            String removeMokkiCom = "DELETE FROM mokki WHERE id =" + id;
+            String removeMokkiCom = "DELETE FROM mokki WHERE id = ?";
+            PreparedStatement pst = dbconection.prepareStatement(removeMokkiCom);
+            pst.setInt(1, id);
+            pst.executeUpdate();
 
-            dbstatement.executeUpdate(removeMokkiCom);
+            //dbstatement.executeUpdate(removeMokkiCom);
             System.out.println("Mokki postettu.");
+
+            //connection.
+            dbconection.close();
         }catch (Exception E){
             System.out.println("Error when removing new mökki to table!");
         }
+
     }
 
     /**
