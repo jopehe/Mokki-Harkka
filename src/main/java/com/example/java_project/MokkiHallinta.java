@@ -79,6 +79,14 @@ public class MokkiHallinta extends  Application{
                 //HALUATKO???
 
 
+    MokkiHallinta(){
+        mokkiIdAsetus = new TextField("");
+        osoiteAsetus = new TextField("");
+        hintaAsetus = new TextField("");
+        kokoAsetus = new TextField("");
+        huoneLkmAsetus = new TextField("");
+        mokkiLista = new ListView<>();
+    }
 
     /**
      * Methodi kääntää string arvon int arvoksi
@@ -269,19 +277,18 @@ public class MokkiHallinta extends  Application{
      */
     public void updateTextArea(){
         System.out.println("SAVED");
-        List<Mokki> mokkit = new ArrayList<Mokki>();
+        List<Mokki> mokkit  = new ArrayList<>();
+        mokkiLista.getItems().clear();
         mokkit = komennot.getAllMokit();
 
         List<String> stringList = new ArrayList<>();
         for(int i = 0; i < mokkit.size(); i++){
-
             /// Mökin nimi
-            System.out.println(mokkit.get(i).getString());
+            System.out.println("ADDED: " + mokkit.get(i).getString());
             /// Indexi mökille
             stringList.add(mokkit.get(i).getString());
         }
         ObservableList<String> oblist = FXCollections.observableArrayList(stringList);
-        mokkiLista = new ListView<>();
         mokkiLista.setItems(oblist);
     }
 
@@ -309,6 +316,7 @@ public class MokkiHallinta extends  Application{
 
             System.out.println("Addres Changerd!");
         });
+
 
         ///  Asettaa mökin hinnan
         hintaAsetus.setOnAction(e -> {
@@ -404,6 +412,7 @@ public class MokkiHallinta extends  Application{
             System.out.println("Index: " + selectedIndex);
             System.out.println("MOUSE CLICK: " + selected + " index: " + selectedIndex);
         });
+
     }
 
     /**
@@ -423,6 +432,8 @@ public class MokkiHallinta extends  Application{
 
     /// Asettaa elementit joiden avulla uusi mökki voidaan luoda ja tallentaa
     private VBox setCreateNewMokki(){
+
+
         Label idLabel = new Label("ID: ");
         mokkiIdAsetus = new TextField("");
 
@@ -441,10 +452,14 @@ public class MokkiHallinta extends  Application{
         Label keittioLable = new Label("Keittio on: ");
         Label kylpyhuoneLable = new Label("Kylpyhuone on: ");
 
+
+
         tallennaButton = new Button("Tallenna");
 
         keittioOn = new RadioButton();
         kylpyhuoneOn = new RadioButton();
+
+
 
         HBox radioButtons = new HBox(
                 keittioLable,keittioOn,
@@ -516,6 +531,7 @@ public class MokkiHallinta extends  Application{
     }
 
     public HBox getLayout(){
+
         lisaaMokki = new Button("Lisaa mökki");
         muokkaaMokkia = new Button("Muokkaa mökkiä");
         poistaMokki = new Button("Poista mökki");
@@ -529,11 +545,12 @@ public class MokkiHallinta extends  Application{
         right_Side.setPrefWidth(600);
 
         // Pääasettelu
-        HBox mainLayout = new HBox(20, left_Side, right_Side);
+        HBox mainLayout = new HBox(left_Side, right_Side);
         mainLayout.setPadding(new Insets(20));
         mainLayout.setPrefSize(1920, 1080);
 
         textArea();
+        updateTextArea();
 
         return  mainLayout;
     }
