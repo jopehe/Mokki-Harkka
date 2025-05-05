@@ -21,13 +21,14 @@ public class MokkiKomennot extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        launch();
-    }
-    public static void main(String[] args) {
-
         getAllMokit();
+
         //removeMokki(1);
         //addNewMokki("Lehmonkyla 12", 25.50, 15.00, 2, true, true);
+    }
+    public static void main(String[] args) {
+        launch();
+
     }
 
     /**
@@ -90,6 +91,7 @@ public class MokkiKomennot extends Application {
     }
 
 
+
     /**
      * Palautta kaikki mökit joilla on samanlaiset arvoit kuin
      * @param osoite on minkä laisia osoiteita haetaan
@@ -130,9 +132,9 @@ public class MokkiKomennot extends Application {
             Connection con = connection.getDatabaseConnection();
             Statement statement = con.createStatement();
 
-            String getAmount = "SELECT id FROM mokki WHERE id IN(SELECT mokki_id FROM varaus)";
-
+            String getAmount = "SELECT id FROM mokki WHERE id IN(SELECT mokki_id FROM varaus) VARAUS(?)";
             ResultSet res = statement.executeQuery(getAmount);
+
             int i = 0;
             while (res.next()){
                 i++;

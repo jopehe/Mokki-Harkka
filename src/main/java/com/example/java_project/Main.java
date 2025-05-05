@@ -27,6 +27,12 @@ public class Main extends Application {
     private ResultSet rs;
     private BorderPane rootLayout;
 
+    MokkiHallinta mokkit;
+    AsiakasHallinta asiakas ;
+    VarausHallinta varaus;
+    LaskuHallinta lasku ;
+    RaporttiHallinta raportit;
+
 
     /**
      *
@@ -44,11 +50,12 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
+        mokkit = new MokkiHallinta();
+        asiakas = new AsiakasHallinta();
+        varaus = new VarausHallinta();
+        lasku = new LaskuHallinta();
+        raportit = new RaporttiHallinta();
 
-        MokkiHallinta mokkit = new MokkiHallinta();
-        AsiakasHallinta asiakas = new AsiakasHallinta();
-        VarausHallinta varaus = new VarausHallinta();
-        LaskuHallinta lasku = new LaskuHallinta();
 
         rootLayout = new BorderPane();
 
@@ -60,20 +67,20 @@ public class Main extends Application {
 
 
         asiakatB.setOnAction(e ->{
-            rootLayout.setCenter(asiakas.getLayout()
+            rootLayout.setCenter(getAsiakasLayout()
             );
         });
 
         mokkiB.setOnAction(e ->{
-            rootLayout.setCenter(mokkit.getLayout()
+            rootLayout.setCenter(getMokkiLayout()
             );
         });
         varausB.setOnAction(e ->{
-            rootLayout.setCenter(varaus.getLayout()
+            rootLayout.setCenter(getVarausLayout()
             );
         });
         laskuB.setOnAction(e ->{
-            rootLayout.setCenter(lasku.getLayout()
+            rootLayout.setCenter(getLaskuLayout()
             );
         });
         raportiB.setOnAction(e ->{
@@ -104,7 +111,7 @@ public class Main extends Application {
      */
     public HBox getAsiakasLayout(){
         HBox layout = new HBox();
-        layout.getChildren().add(new Button("ASIAKAS VIEW"));
+        layout.getChildren().add(asiakas.getLayout());
         return layout;
     }
 
@@ -114,7 +121,7 @@ public class Main extends Application {
      */
     public Pane getMokkiLayout(){
         VBox layout = new VBox();
-        layout.getChildren().add(new Button("MÖKKI VIEW"));
+        layout.getChildren().add(mokkit.getLayout());
         return layout;
     }
 
@@ -124,7 +131,7 @@ public class Main extends Application {
      */
     public Pane getVarausLayout(){
         VBox layout = new VBox();
-        layout.getChildren().add(new Button("VARAUS VIEW"));
+        layout.getChildren().add(varaus.getLayout());
         return layout;
     }
 
@@ -134,7 +141,7 @@ public class Main extends Application {
      */
     public Pane getLaskuLayout(){
         VBox layout = new VBox();
-        layout.getChildren().add(new Button("LASKU VIEW"));
+        layout.getChildren().add(lasku.getLayout());
         return layout;
     }
 
@@ -144,7 +151,7 @@ public class Main extends Application {
      */
     public Pane getRaportiLayout(){
         VBox layout = new VBox();
-        layout.getChildren().add(new Button("RAPORTTI VIEW"));
+        layout.getChildren().add(raportit.getLayout());
         return layout;
     }
 

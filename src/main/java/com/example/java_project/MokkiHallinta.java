@@ -7,15 +7,19 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 
 public class MokkiHallinta extends  Application{
 
+
+    private String mökkiKoodi;
 
     private String osoite;
     private double hinta;
@@ -33,6 +37,8 @@ public class MokkiHallinta extends  Application{
     }
 
     level curlevel;
+
+
     int selectedIndex = -1;
 
     /// Textialueet mötti tietojen asetuksille
@@ -54,6 +60,8 @@ public class MokkiHallinta extends  Application{
     Button muokkaaMokkia;
     Button poistaMokki;
 
+
+    private Mokki selectedMokki;
 
 
     public static void main(String[] args) {
@@ -80,12 +88,29 @@ public class MokkiHallinta extends  Application{
 
 
     MokkiHallinta(){
-        mokkiIdAsetus = new TextField("");
+        //mokkiIdAsetus = new TextField("");
         osoiteAsetus = new TextField("");
         hintaAsetus = new TextField("");
         kokoAsetus = new TextField("");
         huoneLkmAsetus = new TextField("");
         mokkiLista = new ListView<>();
+
+        curlevel = level.ADDMOKKI;
+    }
+
+
+    /**
+     * Asettaa valikon perus tilaan jotta uusi mökki voidaan luoda
+     */
+    private void clearSelection(){
+        osoiteAsetus.setText("");
+        hintaAsetus.setText("");
+        kokoAsetus.setText("");
+        huoneLkmAsetus.setText("");
+
+        keittioOn.setSelected(false);
+        kylpyhuoneOn.setSelected(false);
+
     }
 
     /**
@@ -292,7 +317,6 @@ public class MokkiHallinta extends  Application{
         mokkiLista.setItems(oblist);
     }
 
-
     /**
      * ON alue jossa mökien eri tekstialueta voidaan muokata jotta ne voidaan muyöhemmin talentaa
      */
@@ -339,7 +363,7 @@ public class MokkiHallinta extends  Application{
         });
 
 
-        /// Asettaa juoneen lukumäärän
+        /// Asettaa huoneen lukumäärän
         huoneLkmAsetus.setOnAction(e -> {
             String text = huoneLkmAsetus.getText();
             int val = getIntValue(text);
@@ -376,6 +400,7 @@ public class MokkiHallinta extends  Application{
         /// Poista valittu mokki
         poistaMokki.setOnAction(e -> {
             curlevel = level.REMOVEMOKKI;
+            System.out.println("INDEX: " + selectedIndex);
             if(selectedIndex != -1){
                 komennot.removeMokki(selectedIndex);
                 selectedIndex = -1;
@@ -391,6 +416,7 @@ public class MokkiHallinta extends  Application{
                     if(checkOkValues()){
                         komennot.addNewMokki(osoite, hinta, koko, huoneLK, keittio, kylpyhuone);
                         updateTextArea();
+                        clearSelection();
                         System.out.println("Saved data values! ");
                     }
                     else{
@@ -400,7 +426,9 @@ public class MokkiHallinta extends  Application{
                 case  MODIFYMOKKI:
                     break;
                 case REMOVEMOKKI:
-                    komennot.removeMokki(1);
+                    if(varmitusVastaus("MÖKKI_1") && selectedIndex != -1){
+                        komennot.removeMokki(1);
+                    }
                     break;
             }
         });
@@ -409,11 +437,27 @@ public class MokkiHallinta extends  Application{
         mokkiLista.setOnMouseClicked(e -> {
             String selected = mokkiLista.getSelectionModel().getSelectedItem();
             selectedIndex = mokkiLista.getSelectionModel().getSelectedIndex();
+            //selectedMokki =
             System.out.println("Index: " + selectedIndex);
             System.out.println("MOUSE CLICK: " + selected + " index: " + selectedIndex);
         });
 
     }
+
+
+
+
+    private boolean varmitusVastaus(String text){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Varmistus");
+        alert.setHeaderText(null);
+        alert.setContentText("Haluatko poistaa mökin: " + text);
+        alert.initModality(Modality.APPLICATION_MODAL);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.isPresent() && result.get() == ButtonType.OK;
+    }
+
 
     /**
      * Tarkistetaan onko huoneelle asetetut arvot sopivia
@@ -434,8 +478,8 @@ public class MokkiHallinta extends  Application{
     private VBox setCreateNewMokki(){
 
 
-        Label idLabel = new Label("ID: ");
-        mokkiIdAsetus = new TextField("");
+        //Label idLabel = new Label("ID: ");
+        //mokkiIdAsetus = new TextField("");
 
         Label osoiteLabel = new Label("Osoite: ");
         osoiteAsetus = new TextField("");
@@ -468,7 +512,7 @@ public class MokkiHallinta extends  Application{
         /// Asettaa näkymän  näytön vasemalle puolelle
         VBox left_Side = new VBox(1,
                 //topLayout,
-                idLabel, mokkiIdAsetus,
+                //idLabel, mokkiIdAsetus,
                 osoiteLabel, osoiteAsetus,
                 hintaLabel, hintaAsetus,
                 kokoLabel, kokoAsetus,

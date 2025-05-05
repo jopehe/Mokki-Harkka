@@ -169,5 +169,4 @@ public class Mokki {
      */
     public void setKulpyhuone(boolean kulpyhuone_) {kylpyhuone = kulpyhuone_;}
 
-
 }
