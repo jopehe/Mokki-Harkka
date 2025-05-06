@@ -23,8 +23,7 @@ import java.util.Optional;
 public class MokkiHallinta extends  Application{
 
 
-    private String mökkiKoodi;
-
+    private int id;
     private String osoite;
     private double hinta;
     private double koko;
@@ -347,7 +346,6 @@ public class MokkiHallinta extends  Application{
             System.out.println("Addres Changerd!");
         });
 
-
         ///  Asettaa mökin hinnan
         hintaAsetus.setOnAction(e -> {
             String text = hintaAsetus.getText();
@@ -367,7 +365,6 @@ public class MokkiHallinta extends  Application{
 
             System.out.println("Size Changerd!");
         });
-
 
         /// Asettaa huoneen lukumäärän
         huoneLkmAsetus.setOnAction(e -> {
@@ -395,27 +392,31 @@ public class MokkiHallinta extends  Application{
 
         /// Aseta näkumäksi uuden mökin lisäys
         lisaaMokki.setOnAction(e -> {
+            tallennaButton.setText("TALLENNA");
             curlevel = level.ADDMOKKI;
         });
 
         /// Aseta näkymäksi mökin muokkaus
         muokkaaMokkia.setOnAction(e ->{
             curlevel = level.MODIFYMOKKI;
+            tallennaButton.setText("MUOKKAA");
         });
 
         /// Poista valittu mokki
         poistaMokki.setOnAction(e -> {
             curlevel = level.REMOVEMOKKI;
+            tallennaButton.setText("POISTA");
             System.out.println("INDEX: " + selectedIndex);
-            if(selectedIndex != -1){
-                komennot.removeMokki(selectedIndex);
-                selectedIndex = -1;
-            }
+
 
         });
 
         /// Tallenna muutokset
         tallennaButton.setOnAction(e ->{
+
+            Mokki cur =  komennot.getSingleMokki(mokkiList.get(selectedIndex).getId());
+            int index = cur.getId();
+
 
             switch (curlevel){
                 case ADDMOKKI:
@@ -430,13 +431,22 @@ public class MokkiHallinta extends  Application{
                     }
                     break;
                 case  MODIFYMOKKI:
+                    System.out.println("TALLENETAAN MUUTOKSIA");
 
-
-
+                    if(index != -1){
+                        komennot.updateMokki(index, osoite, hinta, koko, huoneLK, keittio, kylpyhuone);
+                        updateTextArea();
+                        selectedIndex = -1;
+                    }
                     break;
                 case REMOVEMOKKI:
                     if(varmitusVastaus("MÖKKI_1") && selectedIndex != -1){
-                        komennot.removeMokki(1);
+                        //komennot.removeMokki(1);
+
+                        komennot.removeMokki(index);
+                        updateTextArea();
+                        selectedIndex = -1;
+
                     }
                     break;
             }
@@ -454,13 +464,22 @@ public class MokkiHallinta extends  Application{
 
             System.out.println("DATA GOTTEN: " + cur.getString());
 
-            osoiteAsetus.setText(cur.getOsoite());
-            hintaAsetus.setText("" + cur.getHinta());
-            kokoAsetus.setText("" + cur.getKoko());
-            huoneLkmAsetus.setText("" + cur.getHuoneLK());
+            id = cur.getId();
+            osoite = cur.getOsoite();
+            koko = cur.getKoko();
+            hinta = cur.getHinta();
+            huoneLK = cur.getHuoneLK();
+            keittio = cur.getKeittio();
+            kylpyhuone = cur.getKeittio();
 
-            keittioOn.setSelected(cur.getKeittio());
-            kylpyhuoneOn.setSelected(cur.getKylphuone());
+
+            osoiteAsetus.setText(osoite);
+            hintaAsetus.setText("" + hinta);
+            kokoAsetus.setText("" + koko);
+            huoneLkmAsetus.setText("" + huoneLK);
+
+            keittioOn.setSelected(keittio);
+            kylpyhuoneOn.setSelected(kylpyhuone);
 
             //System.out.println("MOUSE CLICK: " + selected + " index: " + selectedIndex);
         });

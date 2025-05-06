@@ -31,6 +31,53 @@ public class MokkiKomennot extends Application {
 
     }
 
+
+    /**
+     * MEthodin avlulla voidaan päivittää halutun mökin tietoja
+     * @param id on id joka halutulla mökillä on
+     * @param osoite on mökin osoite
+     * @param hinta on mökille annettu hinta
+     * @param koko on mökin koko
+     * @param huonelkm lukumäärä huoneita mökissä
+     * @param keittio onko mökissä keittiö
+     * @param kylpyhuone onko mökissä kylpyhuone
+     */
+    public static void updateMokki(int id, String osoite, double hinta, double koko, int huonelkm, boolean keittio, boolean kylpyhuone){
+        String word = "UPDATE mokki SET" +
+                " osoite = ?, " +
+                " hinta = ?, " +
+                " koko = ?, " +
+                " huone_lkm = ?," +
+                " keittio = ?, " +
+                " kylpyhuone = ? " +
+                " WHERE id =  ?";
+
+
+
+        try {
+            DatabaseConnection connection = new DatabaseConnection();
+            Connection con = connection.getDatabaseConnection();
+            PreparedStatement statement = con.prepareStatement(word);
+
+            statement.setString(1, osoite);
+            statement.setDouble(2, hinta);
+            statement.setDouble(3, koko);
+            statement.setInt(4, huonelkm);
+            statement.setBoolean(5, keittio);
+            statement.setBoolean(6, kylpyhuone);
+            statement.setInt(7, id);
+
+
+            statement.executeUpdate();
+
+            con.close();
+            statement.close();
+
+        }catch (Exception E){
+            System.out.println("ERROR: Mökki " + id + "  could not be updated. " + E);
+        }
+    }
+
     /**
      * Hakee kaikki mökit jotka on tallennettu tietokantaan
      * @return lista mökki olioita jotka on tallennettu tietokantaan
@@ -105,9 +152,7 @@ public class MokkiKomennot extends Application {
             String getOsoiteLike = "SELECT * FROM mokki WHERE id =  ? ";
             PreparedStatement statement = con.prepareStatement(getOsoiteLike);
 
-
             statement.setInt(1, id);
-
             ResultSet reult = statement.executeQuery();
 
             if(reult.next()){

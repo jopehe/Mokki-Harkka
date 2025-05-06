@@ -114,6 +114,15 @@ public class CreateMYSQL extends Application {
             dbStatement.executeUpdate(createLaskuTable);
             System.out.println("Lasku table on luotu!");
 
+
+
+
+            String createUserTable = "CREATE  TABLE IF NOT EXISTS user ("+
+                    "id INT AUTO_INCREMENT PRIMARY KEY,"+
+                    "username VARCHAR(30) NOT NULL,"+
+                    "password VARCHAR(20) NOT NULL";
+            dbStatement.executeUpdate(createUserTable);
+
             databaseConnection.close();
 
         }catch (Exception E){
