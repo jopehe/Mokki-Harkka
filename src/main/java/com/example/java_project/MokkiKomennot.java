@@ -60,7 +60,7 @@ public class MokkiKomennot extends Application {
 
                 Mokki newMokki = new Mokki(id,  osoite, hinta, koko, lkm, keittio, kylpyhuone);
                 mokit.add(newMokki);
-                System.out.println(newMokki.toString());
+                System.out.println(newMokki.getId());
                 i++;
             }
         }catch (Exception E){

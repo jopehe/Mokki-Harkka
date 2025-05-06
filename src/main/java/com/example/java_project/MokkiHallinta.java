@@ -13,7 +13,6 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 
 /**
  * VOI:
@@ -57,7 +56,7 @@ public class MokkiHallinta extends  Application{
     RadioButton keittioOn;
     RadioButton kylpyhuoneOn;
 
-    ListView<String> mokkiLista;
+    ListView<String> mokkiListView;
 
 
     Button tallennaButton;
@@ -68,6 +67,7 @@ public class MokkiHallinta extends  Application{
 
     private Mokki selectedMokki;
 
+    private List<Mokki> mokkiList = new ArrayList<>();
 
     public static void main(String[] args) {
         launch(args);
@@ -98,7 +98,7 @@ public class MokkiHallinta extends  Application{
         hintaAsetus = new TextField("");
         kokoAsetus = new TextField("");
         huoneLkmAsetus = new TextField("");
-        mokkiLista = new ListView<>();
+        mokkiListView = new ListView<>();
 
         curlevel = level.ADDMOKKI;
     }
@@ -307,19 +307,20 @@ public class MokkiHallinta extends  Application{
      */
     public void updateTextArea(){
         System.out.println("SAVED");
-        List<Mokki> mokkit  = new ArrayList<>();
-        mokkiLista.getItems().clear();
-        mokkit = komennot.getAllMokit();
+        //List<Mokki> mokkit  = new ArrayList<>();
+        mokkiListView.getItems().clear();
+        //mokkit = komennot.getAllMokit();
+        mokkiList = komennot.getAllMokit();
 
         List<String> stringList = new ArrayList<>();
-        for(int i = 0; i < mokkit.size(); i++){
+        for(int i = 0; i < mokkiList.size(); i++){
             /// Mökin nimi
             //System.out.println("ADDED: " + mokkit.get(i).getString());
             /// Indexi mökille
-            stringList.add(mokkit.get(i).getString());
+            stringList.add(mokkiList.get(i).getString());
         }
         ObservableList<String> oblist = FXCollections.observableArrayList(stringList);
-        mokkiLista.setItems(oblist);
+        mokkiListView.setItems(oblist);
     }
 
     /**
@@ -442,14 +443,14 @@ public class MokkiHallinta extends  Application{
         });
 
         ///  Kun yhtä mökkilistan osista kosketaan
-        mokkiLista.setOnMouseClicked(e -> {
-            String selected = mokkiLista.getSelectionModel().getSelectedItem();
-            selectedIndex = mokkiLista.getSelectionModel().getSelectedIndex();
+        mokkiListView.setOnMouseClicked(e -> {
+            String selected = mokkiListView.getSelectionModel().getSelectedItem();
+            selectedIndex = mokkiListView.getSelectionModel().getSelectedIndex();
 
 
             System.out.println("INDEX: " + selectedIndex);
 
-            Mokki cur =  komennot.getSingleMokki(selectedIndex);
+            Mokki cur =  komennot.getSingleMokki(mokkiList.get(selectedIndex).getId());
 
             System.out.println("DATA GOTTEN: " + cur.getString());
 
@@ -610,7 +611,7 @@ public class MokkiHallinta extends  Application{
         VBox left_Side = new VBox();
         left_Side.getChildren().addAll(topLayout, setCreateNewMokki());
 
-        VBox right_Side = new VBox(10, mokkiLista);
+        VBox right_Side = new VBox(10, mokkiListView);
         right_Side.setPrefWidth(600);
 
         // Pääasettelu
