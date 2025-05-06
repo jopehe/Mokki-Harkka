@@ -7,10 +7,10 @@ package com.example.java_project;
  * Version: 1.0
  */
 public class Mokki {
-    private int mokki;
+    private int id;
     private String osoite;
-    private Double hinta;
-    private Double koko;
+    private double hinta;
+    private double koko;
     private int huoneLK;
     private boolean keittio;
     private boolean kylpyhuone;
@@ -31,7 +31,7 @@ public class Mokki {
     @Override
     public String toString(){
         return
-            "Mökkin id: " + mokki +
+            "Mökkin id: " + id +
             "\nOsoite: " + osoite +
             "\nHinta: " + hinta +
             "\nKoko: " + koko +
@@ -44,7 +44,7 @@ public class Mokki {
      * Paraetriton alistaka mokille
      */
     public Mokki(){
-        mokki = -1;
+        id = -1;
         osoite = "";
         hinta = 0.0;
         koko = 0.0;
@@ -64,7 +64,7 @@ public class Mokki {
      * @param kylpyhuone_ on boolean
      */
     public Mokki(int mokki_, String osoite_, Double hinta_, Double koko_, int huoneLK_, boolean keittio_, boolean kylpyhuone_){
-        mokki = mokki_;
+        id = mokki_;
         osoite = osoite_;
         hinta = hinta_;
         koko = koko_;
@@ -78,7 +78,7 @@ public class Mokki {
      * @return palautettu string arvo
      */
     public String getString(){
-        return mokki + ", " + osoite + ", " + hinta + ", " + koko + ", " + huoneLK + ", " + keittio + ", " + kylpyhuone;
+        return id + ", " + osoite + ", " + hinta + ", " + koko + ", " + huoneLK + ", " + keittio + ", " + kylpyhuone;
     }
 
 
@@ -86,7 +86,7 @@ public class Mokki {
      * Palauttaa mokki idn
      * @return mokkin id
      */
-    public  int getMokki() { return  mokki; }
+    public  int getId() { return id; }
 
     /**
      * Palauttaa mokin osoitteen
@@ -99,13 +99,13 @@ public class Mokki {
      * Palauttaa mokkin hinnan
      * @return string hinta
      */
-    public Double getHinta() { return  hinta; }
+    public double getHinta() { return  hinta; }
 
     /**
      * Palauttaa mokkin koon
      * @return string koko mokkille
      */
-    public Double getKoko() { return  koko; }
+    public double getKoko() { return  koko; }
 
     /**
      * Palauttaa huoneiden lukumäärän
@@ -130,7 +130,7 @@ public class Mokki {
      * Asettaa mokin idn
      * @param mokki_ on int id arvo
      */
-    public void setMokki(int mokki_){ mokki=mokki_; }
+    public void setId(int mokki_){ id =mokki_; }
 
     /**
      * Asettaa osoitteen mokkiin

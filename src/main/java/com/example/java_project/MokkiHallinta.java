@@ -15,7 +15,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
-
+/**
+ * VOI:
+ * (X) LISÄTÄ MÖKIN
+ * (X) POISTAA MÖKIN
+ * (?) MUUTTA MÖKKIÄ
+ */
 public class MokkiHallinta extends  Application{
 
 
@@ -42,7 +47,7 @@ public class MokkiHallinta extends  Application{
     int selectedIndex = -1;
 
     /// Textialueet mötti tietojen asetuksille
-    TextField mokkiIdAsetus;
+    //TextField mokkiIdAsetus;
     TextField osoiteAsetus;
     TextField hintaAsetus;
     TextField kokoAsetus;
@@ -309,7 +314,7 @@ public class MokkiHallinta extends  Application{
         List<String> stringList = new ArrayList<>();
         for(int i = 0; i < mokkit.size(); i++){
             /// Mökin nimi
-            System.out.println("ADDED: " + mokkit.get(i).getString());
+            //System.out.println("ADDED: " + mokkit.get(i).getString());
             /// Indexi mökille
             stringList.add(mokkit.get(i).getString());
         }
@@ -424,6 +429,9 @@ public class MokkiHallinta extends  Application{
                     }
                     break;
                 case  MODIFYMOKKI:
+
+
+
                     break;
                 case REMOVEMOKKI:
                     if(varmitusVastaus("MÖKKI_1") && selectedIndex != -1){
@@ -437,16 +445,33 @@ public class MokkiHallinta extends  Application{
         mokkiLista.setOnMouseClicked(e -> {
             String selected = mokkiLista.getSelectionModel().getSelectedItem();
             selectedIndex = mokkiLista.getSelectionModel().getSelectedIndex();
-            //selectedMokki =
-            System.out.println("Index: " + selectedIndex);
-            System.out.println("MOUSE CLICK: " + selected + " index: " + selectedIndex);
+
+
+            System.out.println("INDEX: " + selectedIndex);
+
+            Mokki cur =  komennot.getSingleMokki(selectedIndex);
+
+            System.out.println("DATA GOTTEN: " + cur.getString());
+
+            osoiteAsetus.setText(cur.getOsoite());
+            hintaAsetus.setText("" + cur.getHinta());
+            kokoAsetus.setText("" + cur.getKoko());
+            huoneLkmAsetus.setText("" + cur.getHuoneLK());
+
+            keittioOn.setSelected(cur.getKeittio());
+            kylpyhuoneOn.setSelected(cur.getKylphuone());
+
+            //System.out.println("MOUSE CLICK: " + selected + " index: " + selectedIndex);
         });
 
     }
 
 
-
-
+    /**
+     * Luo varoituksen ennen kuin mökin poisto toteutetaan
+     * @param text an teksti joka kirjoitetaan viestiin kertoen mikä mökki poistetaan
+     * @return palauttaa bolean arvon siittä painettiinko ok vai cancel
+     */
     private boolean varmitusVastaus(String text){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Varmistus");
@@ -531,8 +556,8 @@ public class MokkiHallinta extends  Application{
      * @return
      */
     private VBox setModifyMokki(){
-        Label idLabel = new Label("ID: ");
-        mokkiIdAsetus = new TextField("");
+        //Label idLabel = new Label("ID: ");
+        //mokkiIdAsetus = new TextField("");
 
         Label osoiteLabel = new Label("Osoite: ");
         osoiteAsetus = new TextField("");
@@ -561,7 +586,7 @@ public class MokkiHallinta extends  Application{
         /// Asettaa näkymän  näytön vasemalle puolelle
         VBox left_Side = new VBox(1,
                 //topLayout,
-                idLabel, mokkiIdAsetus,
+                //idLabel, mokkiIdAsetus,
                 osoiteLabel, osoiteAsetus,
                 hintaLabel, hintaAsetus,
                 kokoLabel, kokoAsetus,

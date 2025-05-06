@@ -49,6 +49,7 @@ public class MokkiKomennot extends Application {
             int i = 1;
             while(result.next()){
                 System.out.println("Kaikki mokit ladattu");
+                int id = result.getInt("id");
                 String osoite = result.getString("osoite");
                 Double hinta = result.getDouble("hinta");
                 Double koko = result.getDouble("koko");
@@ -57,7 +58,7 @@ public class MokkiKomennot extends Application {
                 boolean kylpyhuone = result.getBoolean("kylpyhuone");
 
 
-                Mokki newMokki = new Mokki(i,  osoite, hinta, koko, lkm, keittio, kylpyhuone);
+                Mokki newMokki = new Mokki(id,  osoite, hinta, koko, lkm, keittio, kylpyhuone);
                 mokit.add(newMokki);
                 System.out.println(newMokki.toString());
                 i++;
@@ -90,6 +91,41 @@ public class MokkiKomennot extends Application {
         return new Mokki();
     }
 
+
+    /**
+     * Hakee yhden mökin id merkin avulla
+     * @param id joka mökillä taulussa on
+     * @return palauttaa mökki olion
+     */
+    public static Mokki getSingleMokki(int id ){
+        Mokki mok = null;
+        try {
+            DatabaseConnection connection = new DatabaseConnection();
+            Connection con = connection.getDatabaseConnection();
+            String getOsoiteLike = "SELECT * FROM mokki WHERE id =  ? ";
+            PreparedStatement statement = con.prepareStatement(getOsoiteLike);
+
+
+            statement.setInt(1, id);
+
+            ResultSet reult = statement.executeQuery();
+
+            if(reult.next()){
+                mok = getMokkiData(reult, id);
+                System.out.println(mok.toString());
+            }
+            else{
+                System.out.println("MÖKKIÄ EI LÖYDETTY");
+            }
+
+            con.close();
+            statement.close();
+        }
+        catch (Exception E){
+            System.out.println("Mokkia ei löydetty: " + E);
+        }
+        return  mok;
+    }
 
 
     /**
