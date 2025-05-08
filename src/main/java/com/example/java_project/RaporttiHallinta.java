@@ -1,31 +1,56 @@
 package com.example.java_project;
 
+import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
-public class RaporttiHallinta {
+public class RaporttiHallinta extends Application {
+
+    final String[] month = new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
+    final String[] year = new String[] {"2025", "2026", "2027", "2028", "2029", "2030"};
+
+
+
+    public static void main(String[] args) {
+        System.out.println("HELLO WORLD!");
+        launch();
+
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
 
 
 
 
+
+        Scene scene = new Scene(getLayout());
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("RAPORTOINTI");
+        primaryStage.show();
+    }
 
     public HBox getLayout() {
 
 
-        Button lisaaLasku= new Button("Asikaat");
-        Button muokkaaLaskua = new Button("Varatut mökit");
-        Button poistaLasku= new Button("");
-        HBox topLayout = new HBox(1, lisaaLasku, muokkaaLaskua, poistaLasku);
+        Button asiakasData= new Button("Asiakkaat");
+        Button mokkitData = new Button("Mökkit");
+        Button varauksetData= new Button("Varaukset");
+        Button tulotData= new Button("Tulot");
+        HBox topLayout = new HBox(1, asiakasData, mokkitData, varauksetData, tulotData);
 
-        Button viikko = new Button("Viikko");
+
         Button kuukaus = new Button("Kuukaus");
         Button vuosi = new Button("Vuosi");
-        HBox aikavalit = new HBox(1, viikko, kuukaus, vuosi);
+        Button palaa = new Button("Palaa");
+        HBox aikavalit = new HBox(1, kuukaus, vuosi, palaa);
 
 
         /*
