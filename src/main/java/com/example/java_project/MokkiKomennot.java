@@ -17,21 +17,7 @@ import java.util.List;
     * Version: 0.0.5
  * */
 
-public class MokkiKomennot extends Application {
-
-    @Override
-    public void start(Stage stage) throws Exception {
-        getAllMokit();
-
-        //removeMokki(1);
-        //addNewMokki("Lehmonkyla 12", 25.50, 15.00, 2, true, true);
-    }
-    public static void main(String[] args) {
-        launch();
-
-    }
-
-
+public class MokkiKomennot {
     /**
      * MEthodin avlulla voidaan päivittää halutun mökin tietoja
      * @param id on id joka halutulla mökillä on

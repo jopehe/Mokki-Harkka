@@ -20,6 +20,8 @@ import javafx.stage.Stage;
 import java.sql.DriverManager;
 import java.util.Properties;
 
+
+
 /**
  * Main scripti sisältää ohjelman aloitukseen tarvittavat järjestelmät
  */

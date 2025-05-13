@@ -72,27 +72,7 @@ public class MokkiHallinta extends  Application{
         launch(args);
     }
 
-
-
-    //LUO KÄYTTÄJÄ
-        //ANNA TIEDOT
-            //TALLENA??
-
-    //MUUTA TIETOJA
-        //HAE KÄYTTÄJÄ
-            //AVAA KÖYTTÄJÄ
-                //MUUTA TIETOJA
-                    //TALLENA TIEDOT
-
-
-    //POISTA KÄYTTÄJÄ
-        //HAE KÄYTTÄJÄ
-            //POISTA KÄYTTÄJÄ
-                //HALUATKO???
-
-
     MokkiHallinta(){
-        //mokkiIdAsetus = new TextField("");
         osoiteAsetus = new TextField("");
         hintaAsetus = new TextField("");
         kokoAsetus = new TextField("");
@@ -306,16 +286,11 @@ public class MokkiHallinta extends  Application{
      */
     public void updateTextArea(){
         System.out.println("SAVED");
-        //List<Mokki> mokkit  = new ArrayList<>();
         mokkiListView.getItems().clear();
-        //mokkit = komennot.getAllMokit();
         mokkiList = komennot.getAllMokit();
 
         List<String> stringList = new ArrayList<>();
         for(int i = 0; i < mokkiList.size(); i++){
-            /// Mökin nimi
-            //System.out.println("ADDED: " + mokkit.get(i).getString());
-            /// Indexi mökille
             stringList.add(mokkiList.get(i).getString());
         }
         ObservableList<String> oblist = FXCollections.observableArrayList(stringList);
@@ -327,22 +302,9 @@ public class MokkiHallinta extends  Application{
      */
     private void textArea(){
 
-
-        /*
-        mokkiIdAsetus.setOnAction(e -> {
-            String text = mokkiIdAsetus.getText();
-            int idN = getIntValue(text);
-            id = idN;
-            mokkiIdAsetus.setText("" + idN);
-
-            System.out.println("ID Changerd!");
-        });
-        */
-
         ///  Asettaa mökin osoitteen
         osoiteAsetus.setOnAction(e -> {
             osoite = osoiteAsetus.getText();
-
             System.out.println("Addres Changerd!");
         });
 
@@ -352,7 +314,6 @@ public class MokkiHallinta extends  Application{
             double val = getDoubleValue(text);
             hinta = val;
             hintaAsetus.setText("" + val);
-
             System.out.println("Price Changerd!");
         });
 
@@ -407,17 +368,12 @@ public class MokkiHallinta extends  Application{
             curlevel = level.REMOVEMOKKI;
             tallennaButton.setText("POISTA");
             System.out.println("INDEX: " + selectedIndex);
-
-
         });
 
         /// Tallenna muutokset
         tallennaButton.setOnAction(e ->{
-
             Mokki cur =  komennot.getSingleMokki(mokkiList.get(selectedIndex).getId());
             int index = cur.getId();
-
-
             switch (curlevel){
                 case ADDMOKKI:
                     if(checkOkValues()){
@@ -441,8 +397,6 @@ public class MokkiHallinta extends  Application{
                     break;
                 case REMOVEMOKKI:
                     if(varmitusVastaus("MÖKKI_1") && selectedIndex != -1){
-                        //komennot.removeMokki(1);
-
                         komennot.removeMokki(index);
                         updateTextArea();
                         selectedIndex = -1;
@@ -480,8 +434,6 @@ public class MokkiHallinta extends  Application{
 
             keittioOn.setSelected(keittio);
             kylpyhuoneOn.setSelected(kylpyhuone);
-
-            //System.out.println("MOUSE CLICK: " + selected + " index: " + selectedIndex);
         });
 
     }
@@ -514,17 +466,12 @@ public class MokkiHallinta extends  Application{
         if(hinta == 0.0) { ok = false; System.out.println("HINTA"); }
         if(koko == 0.0) { ok = false; System.out.println("KOKO"); }
         if(huoneLK == 0) { ok = false; System.out.println("HUONELK"); }
-
         return ok;
     }
 
 
     /// Asettaa elementit joiden avulla uusi mökki voidaan luoda ja tallentaa
     private VBox setCreateNewMokki(){
-
-
-        //Label idLabel = new Label("ID: ");
-        //mokkiIdAsetus = new TextField("");
 
         Label osoiteLabel = new Label("Osoite: ");
         osoiteAsetus = new TextField("");
@@ -555,9 +502,7 @@ public class MokkiHallinta extends  Application{
                 kylpyhuoneLable,kylpyhuoneOn);
 
         /// Asettaa näkymän  näytön vasemalle puolelle
-        VBox left_Side = new VBox(1,
-                //topLayout,
-                //idLabel, mokkiIdAsetus,
+        VBox left_Side = new VBox(10,
                 osoiteLabel, osoiteAsetus,
                 hintaLabel, hintaAsetus,
                 kokoLabel, kokoAsetus,
@@ -565,7 +510,7 @@ public class MokkiHallinta extends  Application{
                 radioButtons,
                 tallennaButton);
 
-        left_Side.setPrefWidth(500);
+        left_Side.setPrefWidth(300);
 
         return  left_Side;
     }
@@ -626,21 +571,21 @@ public class MokkiHallinta extends  Application{
         poistaMokki = new Button("Poista mökki");
 
         HBox topLayout = new HBox(1, lisaaMokki, muokkaaMokkia, poistaMokki);
-
         VBox left_Side = new VBox();
+
         left_Side.getChildren().addAll(topLayout, setCreateNewMokki());
+        left_Side.setPrefWidth(500);
 
         VBox right_Side = new VBox(10, mokkiListView);
         right_Side.setPrefWidth(600);
 
         // Pääasettelu
-        HBox mainLayout = new HBox(left_Side, right_Side);
+        HBox mainLayout = new HBox(20, left_Side, right_Side);
         mainLayout.setPadding(new Insets(20));
         mainLayout.setPrefSize(1920, 1080);
 
         textArea();
         updateTextArea();
-
         return  mainLayout;
     }
 }
