@@ -1,5 +1,4 @@
 package com.example.java_project;
-
 import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -42,27 +41,31 @@ public class UserKomennot {
             statemet.setString(1, userName);
             statemet.setString(2, password);
 
-        } catch (Exception E){
+            statemet.executeUpdate();
 
+        } catch (Exception E){
+            System.out.println("Error creating new user: " + E);
         }
     }
 
 
     public boolean findUser(String name, String password){
         String word = "SELECT COUNT(id) FROM user " +
-                "WHERE user_name = ? AND ";
-        //        "password = ?";
+                "WHERE username = ? AND password = ?";
 
         try {
             DatabaseConnection connection = new DatabaseConnection();
             Connection con = connection.getDatabaseConnection();
-            Statement statement = con.createStatement();
-            ResultSet result = statement.executeQuery(word);
+            PreparedStatement statement = con.prepareStatement(word);
 
-            int dat = result.getInt(1);
+            statement.setString(1, name);
+            statement.setString(2, password);
 
-            if(dat >= 1){
-                return true;
+            ResultSet result = statement.executeQuery();
+
+            if(result.next()){
+                int dat1 = result.getInt(1);
+                return dat1 >= 1;
             }
         } catch (Exception E){
             System.out.println("Error trying to check user: " + E);

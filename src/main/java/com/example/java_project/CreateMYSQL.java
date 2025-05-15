@@ -19,6 +19,12 @@ public class CreateMYSQL extends Application {
     public static void main(String[] args) {
         launch();
     }
+    @Override
+    public void start(Stage stage) throws Exception {
+        System.out.println("HELLO ");
+        createDatabase();
+    }
+
 
     /**
      * Poistetaan "mokki_database"
@@ -105,7 +111,7 @@ public class CreateMYSQL extends Application {
                     "varaus_id INT NOT NULL," +
                     "luonti_pvm DATE NOT NULL," +
                     "era_pvm DATE NOT NULL," +
-                    "y_tunnus DATE NOT NULL," +
+                    "y_tunnus VARCHAR(20) NOT NULL," +
                     "viitenumero VARCHAR(50) NOT NULL," +
                     "hinta DECIMAL(10,2) NOT NULL," +
                     "maksettu BOOLEAN NOT NULL," +
@@ -120,8 +126,10 @@ public class CreateMYSQL extends Application {
             String createUserTable = "CREATE  TABLE IF NOT EXISTS user ("+
                     "id INT AUTO_INCREMENT PRIMARY KEY,"+
                     "username VARCHAR(30) NOT NULL,"+
-                    "password VARCHAR(20) NOT NULL";
+                    "password VARCHAR(20) NOT NULL)";
             dbStatement.executeUpdate(createUserTable);
+
+
 
             databaseConnection.close();
 
@@ -130,8 +138,5 @@ public class CreateMYSQL extends Application {
         }
     }
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        System.out.println("HELLO ");
-    }
+
 }

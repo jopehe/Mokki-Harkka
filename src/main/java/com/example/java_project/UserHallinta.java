@@ -15,28 +15,30 @@ import javafx.stage.Stage;
 
 public class UserHallinta extends Application {
 
+    private String userNameCur = "";
+    private String passwordCur = "";
+
+    UserKomennot kom = new UserKomennot();
+
     public static void main(String[] args) {
         launch();
     }
 
     @Override
     public void start(Stage stage) throws Exception {
+
+        //kom.createUser("mikko123", "123123");
+        System.out.println("WORK");
+
         getLayout();
         Scene s = new Scene(getLayout(), 800, 600);
         stage.setScene(s);
         stage.setTitle("LOG IN: ");
         stage.show();
-
-
-
     }
 
-
-
     public BorderPane getLayout() {
-
         BorderPane bp = new BorderPane();
-
 
         TextField password = new TextField("Password: ");
         TextField username = new TextField("Username: ");
@@ -44,8 +46,28 @@ public class UserHallinta extends Application {
         username.setMaxWidth( 100);
 
 
+        password.setOnAction(e ->{
+            passwordCur = password.getText();
+        });
+
+        username.setOnAction(e -> {
+            userNameCur = username.getText();
+        });
+
+
+
 
         Button login = new Button("Log in");
+
+        login.setOnAction(e ->{
+            if(kom.findUser(userNameCur, passwordCur)){
+                System.out.println("USER FOUND:  " + userNameCur + ", " + passwordCur);
+            }
+            else{
+                System.out.println("USER NOT FOUND: " + userNameCur + ", " + passwordCur);
+            }
+        });
+
         login.setPrefWidth(100);
 
         VBox topLayout = new VBox(1, username, password,  login);
