@@ -13,7 +13,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +35,6 @@ public class VarausHallinta extends Application {
     ListView<String> varausListView;
     List<Varaus> varausList;
 
-    private int selectedVarausId = -1;
     private int varausId ;
     private int mokkiId;
     private int asiakasId;
@@ -211,7 +209,6 @@ public class VarausHallinta extends Application {
                 Date luontiVal = getDateValue(luontiAsetus.getText());
 
                 if (asiakasIdVal != -1 && mokkiIdVal != -1 && hintaVal >= 0) {
-                    // Kutsutaan addNewVaraus oikein
                     VarausKomennot.addNewVaraus(asiakasIdVal, mokkiIdVal, hintaVal, vAloitusVal, vLopetusVal, luontiVal);
                     updateTextArea();
                     clearFields();
@@ -251,7 +248,6 @@ public class VarausHallinta extends Application {
                 if(selected == null){
                     showError("Valitse poistettava varaus listasta");
                 }
-                // Oletetaan, että listan ensimmäinen kenttä on varausId, erotettu pilkulla
                 int id = Integer.parseInt(selected.split(",")[0].trim());
                 VarausKomennot.poistaVaraus(id);
                 updateTextArea();
@@ -265,6 +261,7 @@ public class VarausHallinta extends Application {
 
         lisaaLaskuButton.setOnAction(e -> {
             try {
+
                 String selected = varausListView.getSelectionModel().getSelectedItem();
                 if (selected == null) {
                     showError("Valitse varaus listasta, jolle haluat lisätä laskun");
@@ -272,11 +269,6 @@ public class VarausHallinta extends Application {
                 }
 
                 int varausIdVal = Integer.parseInt(selected.split(",")[0].trim());
-
-                // Luo java.sql.Date objekti nykyhetkestä
-                java.sql.Date luontiPvm = new java.sql.Date(System.currentTimeMillis());
-                // 14 päivää myöhemmin
-                java.sql.Date erapaiva = new java.sql.Date(System.currentTimeMillis() + 14L * 24 * 60 * 60 * 1000);
 
                 String ytunnus = "1234567-8";
                 String viitenumero = "1001";
@@ -297,10 +289,12 @@ public class VarausHallinta extends Application {
                     showError("Lasku on jo tehty tälle varaukselle.");
                     return;
                 }
+                double hintaVal = valittuVaraus.getHinta();
+                Date luontiVal = valittuVaraus.getLuontiP();
+                Date vLopetusVal = valittuVaraus.getvLopetus();
 
-                kom.createLasku(varausIdVal, luontiPvm, erapaiva, ytunnus, viitenumero, hinta, false);
+                LaskuKomennot.createLasku(varausIdVal, luontiVal, vLopetusVal, ytunnus, viitenumero, hintaVal, false);
 
-                showError("Lasku lisätty onnistuneesti");
             } catch (Exception ex) {
                 showError("Virhe laskun lisäämisessä: " + ex.getMessage());
             }
@@ -319,7 +313,6 @@ public class VarausHallinta extends Application {
     }
 
     private void showError(String message) {
-        // Käyttää JavaFX:n Alert-ikkunaa virheen näyttämiseen
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
         alert.setTitle("Virhe");
         alert.setHeaderText(null);
