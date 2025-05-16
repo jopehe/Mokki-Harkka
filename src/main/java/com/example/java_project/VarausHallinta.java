@@ -24,8 +24,7 @@ public class VarausHallinta extends Application {
     private Button lisaaVaraus;
     private Button muokkaaVarausta;
     private Button poistaVaraus;
-
-    private Button tallennaButton;
+    private Button lisaaLaskuButton;
 
     private TextField IdMAsetus;
     private TextField IdAsetus;
@@ -37,6 +36,7 @@ public class VarausHallinta extends Application {
     ListView<String> varausListView;
     List<Varaus> varausList;
 
+    private int selectedVarausId = -1;
     private int varausId ;
     private int mokkiId;
     private int asiakasId;
@@ -56,11 +56,9 @@ public class VarausHallinta extends Application {
     public void start(Stage primaryStage) {
 
         Scene scene = new Scene(getLayout());
-
         primaryStage.setScene(scene);
         primaryStage.setTitle("Varausten Hallinta");
         primaryStage.show();
-
     }
 
     public VarausHallinta(){
@@ -109,23 +107,21 @@ public class VarausHallinta extends Application {
      */
     private boolean getBooleanValue(String anser){
         try {
-            Boolean result = Boolean.getBoolean(anser);
-            return result;
-        } catch (Exception E){
+            return Boolean.parseBoolean(anser);
+        } catch (Exception e) {
             System.out.println("Error: Boolean value could not be translated from, ' " + anser + " ' string.");
+            return false;
         }
-        return false;
     }
 
 
-    private Date getDateValue(String anser){
+    private Date getDateValue(String anser) {
         try {
-            Date result = Date.valueOf(anser);
-            return result;
-        } catch (Exception E){
-            System.out.println("Error: Date value could not be translated from, ' " + anser + " ' string.");
+            return Date.valueOf(anser);
+        } catch (Exception e) {
+            System.out.println("Error: Date value could not be translated from, '" + anser + "' string.");
+            return null;
         }
-        return Date.valueOf("0000-0-0");
     }
 
 
@@ -206,61 +202,162 @@ public class VarausHallinta extends Application {
 
         /// Aseta näkumäksi uuden mökin lisäys
         lisaaVaraus.setOnAction(e -> {
+            try {
+                int mokkiIdVal = getIntValue(IdMAsetus.getText());
+                int asiakasIdVal = getIntValue(IdAsetus.getText());
+                double hintaVal = getDoubleValue(hintaAsetus.getText());
+                Date vAloitusVal = getDateValue(aloitusAsetus.getText());
+                Date vLopetusVal = getDateValue(lopetusAsetus.getText());
+                Date luontiVal = getDateValue(luontiAsetus.getText());
+
+                if (asiakasIdVal != -1 && mokkiIdVal != -1 && hintaVal >= 0) {
+                    // Kutsutaan addNewVaraus oikein
+                    VarausKomennot.addNewVaraus(asiakasIdVal, mokkiIdVal, hintaVal, vAloitusVal, vLopetusVal, luontiVal);
+                    updateTextArea();
+                    clearFields();
+                } else {
+                    showError("Tarkista syötetyt tiedot!");
+                }
+            } catch (Exception ex) {
+                showError("Virhe varauksen lisäämisessä: " + ex.getMessage());
+            }
         });
 
         /// Aseta näkymäksi mökin muokkaus
-        muokkaaVarausta.setOnAction(e -> {
+        muokkaaVarausta.setOnAction(e -> {try {
+            int mokkiIdVal = getIntValue(IdMAsetus.getText());
+            int asiakasIdVal = getIntValue(IdAsetus.getText());
+            double hintaVal = getDoubleValue(hintaAsetus.getText());
+            Date vAloitusVal = getDateValue(aloitusAsetus.getText());
+            Date vLopetusVal = getDateValue(lopetusAsetus.getText());
+            Date luontiVal = getDateValue(luontiAsetus.getText());
+
+            if(asiakasIdVal != -1){
+                VarausKomennot.muokkaaVarausta( asiakasIdVal, mokkiIdVal, hintaVal, vAloitusVal, vLopetusVal, luontiVal);
+                updateTextArea();
+                clearFields();
+            } else {
+                showError("Varaus ID ei kelpaa");
+            }
+        } catch (Exception ex) {
+            showError("Virhe varauksen muokkauksessa: " + ex.getMessage());
+        }
         });
 
         /// Poista valittu mokki
         poistaVaraus.setOnAction(e -> {
+            try {
+                String selected = varausListView.getSelectionModel().getSelectedItem();
+                if(selected == null){
+                    showError("Valitse poistettava varaus listasta");
+                }
+                // Oletetaan, että listan ensimmäinen kenttä on varausId, erotettu pilkulla
+                int id = Integer.parseInt(selected.split(",")[0].trim());
+                VarausKomennot.poistaVaraus(id);
+                updateTextArea();
+                clearFields();
+            } catch (Exception ex) {
+                showError("Virhe varauksen poistossa: " + ex.getMessage());
+            }
         });
 
 
 
-        /// Tallenna muutokset
-        tallennaButton.setOnAction(e -> {
+        lisaaLaskuButton.setOnAction(e -> {
+            try {
+                String selected = varausListView.getSelectionModel().getSelectedItem();
+                if (selected == null) {
+                    showError("Valitse varaus listasta, jolle haluat lisätä laskun");
+                    return;
+                }
 
+                int varausIdVal = Integer.parseInt(selected.split(",")[0].trim());
 
+                // Luo java.sql.Date objekti nykyhetkestä
+                java.sql.Date luontiPvm = new java.sql.Date(System.currentTimeMillis());
+                // 14 päivää myöhemmin
+                java.sql.Date erapaiva = new java.sql.Date(System.currentTimeMillis() + 14L * 24 * 60 * 60 * 1000);
+
+                String ytunnus = "1234567-8";
+                String viitenumero = "1001";
+
+                Varaus valittuVaraus = varausList.stream()
+                        .filter(v -> v.getVarausId() == varausIdVal)
+                        .findFirst()
+                        .orElse(null);
+
+                if (valittuVaraus == null) {
+                    showError("Varausta ei löytynyt");
+                    return;
+                }
+
+                double hinta = valittuVaraus.getHinta();
+
+                if (VarausKomennot.checkLaskuOnTehty(varausIdVal)) {
+                    showError("Lasku on jo tehty tälle varaukselle.");
+                    return;
+                }
+
+                kom.createLasku(varausIdVal, luontiPvm, erapaiva, ytunnus, viitenumero, hinta, false);
+
+                showError("Lasku lisätty onnistuneesti");
+            } catch (Exception ex) {
+                showError("Virhe laskun lisäämisessä: " + ex.getMessage());
+            }
         });
 
 
     }
 
+    private void clearFields() {
+        IdMAsetus.clear();
+        IdAsetus.clear();
+        hintaAsetus.clear();
+        aloitusAsetus.clear();
+        lopetusAsetus.clear();
+        luontiAsetus.clear();
+    }
+
+    private void showError(String message) {
+        // Käyttää JavaFX:n Alert-ikkunaa virheen näyttämiseen
+        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+        alert.setTitle("Virhe");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 
     public HBox getLayout() {
-
-        updateTextArea();
-
-
 
         lisaaVaraus = new Button("Lisaa varaus");
         muokkaaVarausta = new Button("Muokkaa varaus");
         poistaVaraus = new Button("Poista varaus");
-        HBox topLayout = new HBox(1, lisaaVaraus, muokkaaVarausta, poistaVaraus);
+        lisaaLaskuButton = new Button("Lisää lasku");
+
+        HBox topLayout = new HBox(10,lisaaVaraus, muokkaaVarausta, poistaVaraus, lisaaLaskuButton);
 
 
 
         Label idMLabel = new Label("Mokki id: ");
-        IdMAsetus = new TextField("");
+        IdMAsetus = new TextField();
 
         Label idALabel = new Label("Asiakas id: ");
-        IdAsetus = new TextField("");
+        IdAsetus = new TextField();
 
         Label hintaLabel = new Label("Hinta: ");
-        hintaAsetus = new TextField("");
+        hintaAsetus = new TextField();
 
         Label aloitusLabel = new Label("Aloitus: ");
-        aloitusAsetus = new TextField("");
+        aloitusAsetus = new TextField();
 
         Label lopetusLabel = new Label("Lopetus: ");
-        lopetusAsetus = new TextField("");
+        lopetusAsetus = new TextField();
 
         Label luontiLable = new Label("Luonti paiva: ");
-        luontiAsetus = new TextField("");
+        luontiAsetus = new TextField();
 
 
-        tallennaButton = new Button("Tallenna");
 
 
         VBox rightSide = new VBox(1,
@@ -283,6 +380,9 @@ public class VarausHallinta extends Application {
         mainLayout.setPadding(new Insets(20));
         mainLayout.setPrefSize(1920, 1080);
 
+        textArea();
+        updateTextArea();
         return  mainLayout;
+
     }
 }
