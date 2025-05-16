@@ -19,22 +19,18 @@ import java.sql.Date;
 import java.util.List;
 
 public class LaskuHallinta extends Application {
-    TextField idAsetus;
-    TextField osoiteAsetus;
-    TextField paivaAsetus;
-    TextField kokoAsetus;
-    TextField ytunnusAsetus;
-    TextField viiteAsetus;
-    TextField hintaAsetus;
-    TextField maksettuAsetus;
+    private TextField idAsetus;
+    private TextField varausidAsetus;
+    private TextField luontipvAsetus;
+    private TextField erapvmAsetus;
+    private TextField ytunnusAsetus;
+    private TextField viiteAsetus;
+    private TextField hintaAsetus;
+    private TextField maksettuAsetus;
 
-    Button lisaaLasku;
-    Button muokkaaLaskua;
-    Button poistaLasku;
-
-
-
-    Button tallennaLasku;
+    private Button lisaaLasku;
+    private Button muokkaaLaskua;
+    private Button poistaLasku;
 
 
     LaskuKomennot kom = new LaskuKomennot();
@@ -71,6 +67,42 @@ public class LaskuHallinta extends Application {
 
     }
 
+    private boolean getBooleanValue(String anser){
+        try {
+            return Boolean.parseBoolean(anser);
+        } catch (Exception e) {
+            System.out.println("Error: Boolean value could not be translated from, ' " + anser + " ' string.");
+            return false;
+        }
+    }
+    private Date getDateValue(String anser) {
+        try {
+            return Date.valueOf(anser);
+        } catch (Exception e) {
+            System.out.println("Error: Date value could not be translated from, '" + anser + "' string.");
+            return null;
+        }
+    }
+    private double getDoubleValue(String anser){
+        try{
+            double result = Double.parseDouble(anser);
+            return result;
+
+        } catch (Exception E){
+            System.out.println("Error: Double value could not be translated from, ' " + anser + " ' string.");
+        }
+        return -1.0;
+    }
+    private int getIntValue(String anser){
+        try{
+            int result = Integer.parseInt(anser);
+            return result;
+        } catch (Exception E){
+            System.out.println("Error: Int value could not be translated from, ' " + anser + " ' string. " + E);
+        }
+        return -1;
+    }
+
 
 
     public void updateTextArea(){
@@ -86,31 +118,31 @@ public class LaskuHallinta extends Application {
         laskuList.setItems(oblist);
     }
 
-    public void textArea(){
-        idAsetus.setOnAction(e ->{
-            String text = idAsetus.getText();
-            int val = Integer.parseInt(text);
-            id = val;
-            idAsetus.setText("" + val);
-        });
-        osoiteAsetus.setOnAction(e ->{
-            String text = osoiteAsetus.getText();
+    public void textArea() {
+//        idAsetus.setOnAction(e ->{
+//            String text = idAsetus.getText();
+//            int val = Integer.parseInt(text);
+//            id = val;
+//            idAsetus.setText("" + val);
+//        });
+        varausidAsetus.setOnAction(e ->{
+            String text = varausidAsetus.getText();
             int val = Integer.parseInt(text);
             varaus_id = val;
 
         });
-        paivaAsetus.setOnAction(e ->{
-            String text = paivaAsetus.getText();
+        luontipvAsetus.setOnAction(e ->{
+            String text = luontipvAsetus.getText();
             Date dat = Date.valueOf(text);
             luonti_pvm = dat;
-            paivaAsetus.setText(dat.toString());
+            luontipvAsetus.setText(dat.toString());
 
         });
-        kokoAsetus.setOnAction(e ->{
-            String text = kokoAsetus.getText();
+        erapvmAsetus.setOnAction(e ->{
+            String text = erapvmAsetus.getText();
             Date dat = Date.valueOf(text);
             era_pvm = dat;
-            kokoAsetus.setText(dat.toString());
+            erapvmAsetus.setText(dat.toString());
         });
         ytunnusAsetus.setOnAction(e ->{
             String text = ytunnusAsetus.getText();
@@ -135,25 +167,94 @@ public class LaskuHallinta extends Application {
 
         });
 
-
         lisaaLasku.setOnAction(e ->{
+            try {
+                int varausIdVal= getIntValue(varausidAsetus.getText());
+                Date luontipvVal = getDateValue(luontipvAsetus.getText());
+                Date erapvmVal = getDateValue(erapvmAsetus.getText());
+                String ytunnusVal = ytunnusAsetus.getText();
+                String viiteVal = viiteAsetus.getText();
+                double hintaVal = getDoubleValue(hintaAsetus.getText());
+                boolean maksettuVal=getBooleanValue(maksettuAsetus.getText());
+
+
+                if (varausIdVal != -1 && hintaVal >= 0) {
+                    LaskuKomennot.createLasku(varausIdVal,luontipvVal,erapvmVal,ytunnusVal,viiteVal,hintaVal,maksettuVal);
+                    updateTextArea();
+                    clearFields();
+                } else {
+                    showError("Tarkista syötetyt tiedot!");
+                }
+            } catch (Exception ex) {
+                showError("Virhe varauksen lisäämisessä: " + ex.getMessage());
+            }
+
 
         });
-        muokkaaLaskua.setOnAction(e ->{
 
+
+        muokkaaLaskua.setOnAction(e -> {
+            try {
+                int varausIdVal= getIntValue(varausidAsetus.getText());
+                Date luontipvVal = getDateValue(luontipvAsetus.getText());
+                Date erapvmVal = getDateValue(erapvmAsetus.getText());
+                String ytunnusVal = ytunnusAsetus.getText();
+                String viiteVal = viiteAsetus.getText();
+                double hintaVal = getDoubleValue(hintaAsetus.getText());
+                boolean maksettuVal=getBooleanValue(maksettuAsetus.getText());
+
+
+                if (varausIdVal != -1) {
+                    LaskuKomennot.updateLasku(varausIdVal,luontipvVal,erapvmVal,ytunnusVal,viiteVal,hintaVal,maksettuVal);
+                    updateTextArea();
+                    clearFields();
+                } else {
+                    showError("Varaus ID ei kelpaa");
+                }
+            } catch (Exception ex) {
+                showError("Virhe laskun muokkauksessa: " + ex.getMessage());
+            }
         });
-        poistaLasku.setOnAction(e ->{
 
+        poistaLasku.setOnAction(e -> {
+            try {
+                String selected = laskuList.getSelectionModel().getSelectedItem();
+                if (selected == null) {
+                    showError("Valitse poistettava lasku listasta");
+                    return;
+                }
+
+                int id = Integer.parseInt(selected.split(",")[0].trim());
+                kom.poistaLasku(id);
+                updateTextArea();
+            } catch (Exception ex) {
+                showError("Virhe laskun poistossa: " + ex.getMessage());
+            }
         });
-
-
-
-
     }
 
-    public HBox getLayout() {
+    private void clearFields() {
+        idAsetus.clear();
+        varausidAsetus.clear();
+        luontipvAsetus.clear();
+        erapvmAsetus.clear();
+        ytunnusAsetus.clear();
+        viiteAsetus.clear();
+        hintaAsetus.clear();
+        maksettuAsetus.clear();
 
-        updateTextArea();
+    }
+    private void showError(String message) {
+        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+        alert.setTitle("Virhe");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+
+
+    public HBox getLayout() {
 
         lisaaLasku= new Button("Lisaa lasku");
         muokkaaLaskua = new Button("Muokkaa laskua");
@@ -162,32 +263,32 @@ public class LaskuHallinta extends Application {
 
 
 
-        Label idLabel = new Label("ID: ");
-        TextField IdAsetus = new TextField("");
+//        Label idLabel = new Label("ID: ");
+//        idAsetus =new TextField();
 
-        Label osoiteLabel = new Label("Varaus id: ");
-        TextField osoiteAsetus = new TextField("");
+        Label varausidLabel = new Label("Varaus id: ");
+        varausidAsetus =new TextField();
 
-        Label paivaLabel = new Label("Luonti päivä: ");
-        TextField paivaAsetus = new TextField("");
+        Label luontipvLabel = new Label("Luonti päivä: ");
+        luontipvAsetus =new TextField();
 
-        Label kokoLabel = new Label("Erä päivä: ");
-        TextField kokoAsetus = new TextField("");
+        Label erapvmLabel = new Label("Erä päivä: ");
+        erapvmAsetus=new TextField();
 
 
-        Label ytunnus = new Label("Yritys tunnus: ");
-        TextField ytunnusAsetus = new TextField("");
+        Label ytunnusLabel = new Label("Yritys tunnus: ");
+        ytunnusAsetus=new TextField();
 
 
         Label viiteLabel = new Label("Viite numero: ");
-        TextField viiteAsetus = new TextField("");
+        viiteAsetus=new TextField();
 
 
         Label hintaLable = new Label("Hinta: ");
-        TextField hintaAsetus = new TextField("");
+        hintaAsetus=new TextField();
 
         Label maksettuLAble = new Label("Maksettu: ");
-        TextField maksettuAsetus = new TextField("");
+        maksettuAsetus=new TextField();
 
 
 
@@ -196,11 +297,11 @@ public class LaskuHallinta extends Application {
 
         VBox rightSide = new VBox(1,
                 topLayout,
-                idLabel, IdAsetus,
-                osoiteLabel, osoiteAsetus,
-                paivaLabel, paivaAsetus,
-                kokoLabel, kokoAsetus,
-                ytunnus, ytunnusAsetus,
+//                idLabel, idAsetus,
+                varausidLabel, varausidAsetus,
+                luontipvLabel, luontipvAsetus,
+                ytunnusLabel, ytunnusAsetus,
+                erapvmLabel, erapvmAsetus,
                 viiteLabel, viiteAsetus,
                 hintaLable, hintaAsetus,
                 maksettuLAble, maksettuAsetus);
@@ -216,6 +317,8 @@ public class LaskuHallinta extends Application {
         mainLayout.setPadding(new Insets(20));
         mainLayout.setPrefSize(1920, 1080);
 
+        textArea();
+        updateTextArea();
         return  mainLayout;
     }
 }
