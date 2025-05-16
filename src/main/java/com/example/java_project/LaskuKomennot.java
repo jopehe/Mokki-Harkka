@@ -46,7 +46,7 @@ public class LaskuKomennot {
 
 
 
-    public void createLasku(int id, int varaus, Date luontiPvm, Date eraPvm, String ytun, String viitenum, double hinta, boolean maksettu){
+    public static void createLasku( int varaus, Date luontiPvm, Date eraPvm, String ytun, String viitenum, double hinta, boolean maksettu){
         try {
             String addUser = "INSERT INTO lasku (varaus_id, luonti_pvm, era_pvm, y_tunnus, viitenumero, hinta, maksettu) VALUES(?,?,?,?,?,?,?)";
             DatabaseConnection connection = new DatabaseConnection();
@@ -71,36 +71,57 @@ public class LaskuKomennot {
     }
 
 
-    public void updateLasku(int id, int varaus, Date luontiPvm, Date eraPvm, String ytun, String viitenum, double hinta, boolean maksettu){
+    public static void updateLasku(int varaus, Date luontiPvm, Date eraPvm, String ytun, String viitenum, double hinta, boolean maksettu) {
         try {
-            String word = "UPDATE varaus SET " +
-                    "id = ?, " +
-                    "varaus_id = ?, " +
-                    "lunti_pvm = ?, " +
+            String sql = "UPDATE lasku SET " +
+                    "luonti_pvm = ?, " +
                     "era_pvm = ?, " +
                     "y_tunnus = ?, " +
                     "viitenumero = ?, " +
                     "hinta = ?, " +
-                    "maksettu = ?; ";
+                    "maksettu = ? " +
+                    "WHERE varaus_id = ?";
 
             DatabaseConnection connection = new DatabaseConnection();
             Connection con = connection.getDatabaseConnection();
-            PreparedStatement statement = con.prepareStatement(word);
+            PreparedStatement statement = con.prepareStatement(sql);
 
-            statement.setInt(1, varaus);
-            statement.setDate(2, luontiPvm);
-            statement.setDate(3, eraPvm);
+            statement.setDate(1, luontiPvm);
+            statement.setDate(2, eraPvm);
+            statement.setString(3, ytun);
+            statement.setString(4, viitenum);
+            statement.setDouble(5, hinta);
+            statement.setBoolean(6, maksettu);
+            statement.setInt(7, varaus);  // WHERE-ehto
 
-            statement.setString(4, ytun);
-            statement.setString(5, viitenum);
-            statement.setDouble(6, hinta);
-            statement.setBoolean(7, maksettu);
+            int rowsUpdated = statement.executeUpdate();
+            System.out.println("Päivitetyt rivit: " + rowsUpdated);
 
-            statement.executeUpdate();
             con.close();
             statement.close();
-        } catch (Exception E){
+        } catch (Exception e) {
+            e.printStackTrace();  // Näytä virhe konsolissa
+        }
+    }
 
+
+    public void poistaLasku(int id) {
+        try {
+            String sql = "DELETE FROM lasku WHERE id = ?";
+            DatabaseConnection connection = new DatabaseConnection();
+            Connection con = connection.getDatabaseConnection();
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setInt(1, id);
+            int rowsDeleted = statement.executeUpdate();
+            if (rowsDeleted > 0) {
+                System.out.println("Lasku id:llä " + id + " poistettu onnistuneesti.");
+            } else {
+                System.out.println("Laskua id:llä " + id + " ei löytynyt.");
+            }
+            statement.close();
+            con.close();
+        } catch (Exception e) {
+            System.out.println("Error deleting lasku: " + e);
         }
     }
 }
