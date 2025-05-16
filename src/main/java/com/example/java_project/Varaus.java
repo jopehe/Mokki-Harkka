@@ -6,6 +6,7 @@ import java.sql.Date;
  * Sisältää tiedot mitä yksi varaus sisöltää
  */
 public class Varaus {
+
     private int varausId ;
     private int mokkiId;
     private int asiakasId;
@@ -16,7 +17,7 @@ public class Varaus {
 
     @Override
     public String toString(){
-        return "" +  varausId + ", " + mokkiId + ", " + asiakasId + ", " + hinta + ", " + vAloitus + ", " + vLopetus + ", " + luontiP;
+        return ""+ varausId + ", " + mokkiId + ", " + asiakasId + ", " + hinta + ", " + vAloitus + ", " + vLopetus + ", " + luontiP;
     }
 
 
@@ -24,13 +25,13 @@ public class Varaus {
      *
      */
     public Varaus(){
-        varausId = -1;
+        this.varausId= -1;
         mokkiId = -1;
         asiakasId = -1;
         hinta = -1.0;
-        vAloitus = Date.valueOf("0000-0-0");
-        vLopetus = Date.valueOf("0000-0-0");
-        luontiP = Date.valueOf("0000-0-0");
+        vAloitus = null;
+        vLopetus = null;
+        luontiP = null;
     }
 
     /**
@@ -44,7 +45,7 @@ public class Varaus {
      * @param luonti
      */
     public Varaus(int id_, int mokkiId_, int asiakasId_, double hinta_, Date aloitus, Date lopetus, Date luonti){
-        varausId = id_;
+        this.varausId = id_;
         mokkiId = mokkiId_;
         asiakasId = asiakasId_;
         hinta = hinta_;
@@ -52,6 +53,7 @@ public class Varaus {
         vLopetus = lopetus;
         luontiP = luonti;
     }
+
 
 
     public int getVarausId() {
@@ -109,4 +111,6 @@ public class Varaus {
     public void setLuontiP(Date luontiP) {
         this.luontiP = luontiP;
     }
+
+
 }
