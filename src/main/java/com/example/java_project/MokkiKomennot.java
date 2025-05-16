@@ -188,6 +188,8 @@ public class MokkiKomennot {
         return mokit;
     }
 
+
+
     /**
      * Palauttaa määrän yhdistettyjä tauluja joita on annetuun id arvoon
      * @paran id on arvo mökille joihin yhdistettyjen taulujen määrää haetaan

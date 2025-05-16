@@ -160,7 +160,7 @@ public class RaporttiHallinta extends Application {
 
 
 
-        /// Asetetaan kuukaudet listaan
+        /// Asetetaan ALOITUS kuukaudet listaan
         ObservableList<String> items = FXCollections.observableArrayList(month);
         final ComboBox comboBox = new ComboBox(items);
         comboBox.setPromptText("" + curMonth);
@@ -171,9 +171,7 @@ public class RaporttiHallinta extends Application {
                 System.out.println(curYear + "-" + curMonth);
             }
         });
-
-
-        /// Asetetaan vuosi listaan
+        /// Asetetaan ALOITUS vuosi listaan
         ObservableList<String> itemsy = FXCollections.observableArrayList(year);
         final ComboBox comboBoxy = new ComboBox(itemsy);
         comboBoxy.setPromptText("" + curYear);
@@ -184,6 +182,38 @@ public class RaporttiHallinta extends Application {
                 System.out.println(curYear + "-" + curMonth);
             }
         });
+
+
+
+
+        /// Asetetaan LOPETUS kuukaudet listaan
+        ObservableList<String> items2 = FXCollections.observableArrayList(month);
+        final ComboBox comboBox2 = new ComboBox(items);
+        comboBox.setPromptText("" + curMonth);
+        comboBox.valueProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                curMonth = Integer.valueOf(t1.toString());
+                System.out.println(curYear + "-" + curMonth);
+            }
+        });
+
+
+        /// Asetetaan  LOPETUS vuosi listaan
+        ObservableList<String> itemsy2 = FXCollections.observableArrayList(year);
+        final ComboBox comboBoxy2 = new ComboBox(itemsy);
+        comboBoxy.setPromptText("" + curYear);
+        comboBoxy.valueProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                curYear = Integer.valueOf(t1.toString());
+                System.out.println(curYear + "-" + curMonth);
+            }
+        });
+
+
+
+
 
         Label kaikki = new Label("Kaikki: ");
         Label aikavalilla = new Label("Aikavalilla: ");
