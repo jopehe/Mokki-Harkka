@@ -39,7 +39,6 @@ public class CreateMYSQL extends Application {
             Statement statement = connectionDB.createStatement();
             statement.executeUpdate(dbquery);
             connectionDB.close();
-            ;
             System.out.println("Database mokki_database on poistettu!");
         }catch (Exception E){
             System.out.println("Error removing database: " + E);
@@ -126,13 +125,12 @@ public class CreateMYSQL extends Application {
             String createUserTable = "CREATE  TABLE IF NOT EXISTS user ("+
                     "id INT AUTO_INCREMENT PRIMARY KEY,"+
                     "username VARCHAR(30) NOT NULL,"+
-                    "password VARCHAR(20) NOT NULL)";
+                    "password VARCHAR(20) NOT NULL," +
+                    "admin BOOLEAN NOT NULL)";
             dbStatement.executeUpdate(createUserTable);
             databaseConnection.close();
 
-
-
-
+            checkAndAddAdminUser();
 
 
         }catch (Exception E){
@@ -140,5 +138,47 @@ public class CreateMYSQL extends Application {
         }
     }
 
+
+    /**
+     * Lisää uuden admin ahhmon jos users table on tyhjä
+     */
+    public static void checkAndAddAdminUser() {
+        try {
+            DatabaseConnection connection = new DatabaseConnection();
+            Connection databaseConnection = connection.getDatabaseConnection();
+
+            String checkUserTable = "SELECT COUNT(*) FROM user";
+            Statement statement = databaseConnection.createStatement();
+            ResultSet rs = statement.executeQuery(checkUserTable);
+
+            int userCount = 0;
+            if (rs.next()) {
+                userCount = rs.getInt(1);
+            }
+
+
+            ///  Lisää uden admin käyttäjämn jos yhtään käytäjää ei ole aikaisemmin luotu
+            if (userCount == 0) {
+                String insertAdminUser = "INSERT INTO user (username, password, admin) VALUES (?, ?, ?)";
+                PreparedStatement insertStmt = databaseConnection.prepareStatement(insertAdminUser);
+
+                insertStmt.setString(1, "admin");
+                insertStmt.setString(2, "1111");
+                insertStmt.setBoolean(3, true);
+
+                insertStmt.executeUpdate();
+                System.out.println("Aloitus admin luotu.");
+            } else {
+                System.out.println("Adminia ei tarvittu lisätä.");
+            }
+
+            rs.close();
+            statement.close();
+            databaseConnection.close();
+
+        } catch (Exception e) {
+            System.out.println("Error adminin lisäyksessä: " + e);
+        }
+    }
 
 }

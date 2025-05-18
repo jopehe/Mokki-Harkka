@@ -28,10 +28,7 @@ public class UserHallinta extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-
-        //kom.createUser("Hello", "World");
         System.out.println("WORK");
-
         getLayout();
         Scene s = new Scene(getLayout(), 800, 600);
         stage.setScene(s);
@@ -39,6 +36,20 @@ public class UserHallinta extends Application {
         stage.show();
     }
 
+
+    public String getUsername(){
+            return this.userNameCur;
+    }
+    public String getPassword(){
+        return this.passwordCur;
+    }
+
+
+
+    public void resetUser(){
+        userNameCur = "";
+        passwordCur = "";
+    }
 
     public UserHallinta(){
         loginButton = new Button("Log in");

@@ -372,8 +372,9 @@ public class MokkiHallinta extends  Application{
 
         /// Tallenna muutokset
         tallennaButton.setOnAction(e ->{
-            Mokki cur =  komennot.getSingleMokki(mokkiList.get(selectedIndex).getId());
-            int index = cur.getId();
+            Mokki cur;
+            int index;
+
             switch (curlevel){
                 case ADDMOKKI:
                     if(checkOkValues()){
@@ -389,6 +390,9 @@ public class MokkiHallinta extends  Application{
                 case  MODIFYMOKKI:
                     System.out.println("TALLENETAAN MUUTOKSIA");
 
+                    cur =  komennot.getSingleMokki(mokkiList.get(selectedIndex).getId());
+                    index = cur.getId();
+
                     if(index != -1){
                         komennot.updateMokki(index, osoite, hinta, koko, huoneLK, keittio, kylpyhuone);
                         updateTextArea();
@@ -396,6 +400,9 @@ public class MokkiHallinta extends  Application{
                     }
                     break;
                 case REMOVEMOKKI:
+                    cur =  komennot.getSingleMokki(mokkiList.get(selectedIndex).getId());
+                    index = cur.getId();
+
                     if(varmitusVastaus("MÖKKI_1") && selectedIndex != -1){
                         komennot.removeMokki(index);
                         updateTextArea();

@@ -126,7 +126,7 @@ public class Main extends Application {
 
 
         user.loginButton.setOnAction(e ->{
-            if(user.kom.findUser(user.userNameCur, user.passwordCur)){
+            if(user.kom.findUser(user.getUsername(), user.getPassword())){
                 System.out.println("USER FOUND:  " + user.userNameCur + ", " + user.passwordCur);
                 login = true;
                 HBox tobBar;
@@ -145,15 +145,6 @@ public class Main extends Application {
                 System.out.println("USER NOT FOUND: " + user.userNameCur + ", " + user.passwordCur);
             }
         });
-
-
-
-
-
-
-
-
-
 
         HBox tobBar = new HBox(2, asiakatB, mokkiB, varausB, laskuB, raportiB, logOut);
         logOut.setAlignment(Pos.TOP_RIGHT);
