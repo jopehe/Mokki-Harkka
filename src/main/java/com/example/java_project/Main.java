@@ -9,6 +9,7 @@ import java.sql.*;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
@@ -29,12 +30,16 @@ public class Main extends Application {
     private ResultSet rs;
     private BorderPane rootLayout;
 
+
+    UserHallinta user;
     MokkiHallinta mokkit;
     AsiakasHallinta asiakas ;
     VarausHallinta varaus;
     LaskuHallinta lasku ;
     RaporttiHallinta raportit;
 
+    boolean login;
+    boolean admin;
 
     /**
      *
@@ -52,6 +57,14 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
+        CreateMYSQL.createDatabase();
+
+
+        login = false;
+        admin = true;
+
+
+        user = new UserHallinta();
         mokkit = new MokkiHallinta();
         asiakas = new AsiakasHallinta();
         varaus = new VarausHallinta();
@@ -66,6 +79,8 @@ public class Main extends Application {
         Button varausB = new Button("Varaus");
         Button laskuB = new Button("Lasku");
         Button raportiB = new Button("Raportointi");
+        Button kauttajatB = new Button("Käyttäjät");
+        Button logOut = new Button("LOGOUT");
 
 
         asiakatB.setOnAction(e ->{
@@ -77,22 +92,81 @@ public class Main extends Application {
             rootLayout.setCenter(getMokkiLayout()
             );
         });
+
+
         varausB.setOnAction(e ->{
             rootLayout.setCenter(getVarausLayout()
             );
         });
+
+
         laskuB.setOnAction(e ->{
             rootLayout.setCenter(getLaskuLayout()
             );
         });
+
+
         raportiB.setOnAction(e ->{
             rootLayout.setCenter(getRaportiLayout()
             );
         });
 
-        HBox tobBar = new HBox(2, asiakatB, mokkiB, varausB, laskuB, raportiB);
+        kauttajatB.setOnAction(e ->{
+            rootLayout.setCenter(getKauttajatLayot());
+
+        });
+
+        logOut.setOnAction(e ->{
+            login = false;
+            System.out.println("LOG OUT");
+            rootLayout.setCenter(null);
+            rootLayout.setTop(null);
+            rootLayout.setCenter(user.getStartLayout());
+        });
+
+
+        user.loginButton.setOnAction(e ->{
+            if(user.kom.findUser(user.userNameCur, user.passwordCur)){
+                System.out.println("USER FOUND:  " + user.userNameCur + ", " + user.passwordCur);
+                login = true;
+                HBox tobBar;
+                if(admin){
+                    tobBar = new HBox(2, asiakatB, mokkiB, varausB, laskuB, raportiB, kauttajatB, logOut);
+                }
+                else{
+                    tobBar = new HBox(2, asiakatB, mokkiB, varausB, laskuB, raportiB, logOut);
+                }
+
+                tobBar.setPadding(new Insets(5));
+                rootLayout.setTop(tobBar);
+                rootLayout.setCenter(null);
+            }
+            else{
+                System.out.println("USER NOT FOUND: " + user.userNameCur + ", " + user.passwordCur);
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+        HBox tobBar = new HBox(2, asiakatB, mokkiB, varausB, laskuB, raportiB, logOut);
+        logOut.setAlignment(Pos.TOP_RIGHT);
         tobBar.setPadding(new Insets(5));
         rootLayout.setTop(tobBar);
+
+
+
+        if(!login){
+            System.out.println("SET LOG IN");
+            rootLayout = new BorderPane();
+            rootLayout.setCenter(user.getStartLayout());
+        }
 
 
         Scene scene = new Scene(rootLayout, 800, 800);
@@ -154,6 +228,13 @@ public class Main extends Application {
     public Pane getRaportiLayout(){
         VBox layout = new VBox();
         layout.getChildren().add(raportit.getLayout());
+        return layout;
+    }
+
+
+    public Pane getKauttajatLayot(){
+        VBox layout = new VBox();
+        layout.getChildren().add(user.getLayout());
         return layout;
     }
 

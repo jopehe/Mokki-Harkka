@@ -17,7 +17,7 @@ public class Varaus {
 
     @Override
     public String toString(){
-        return ""+ varausId + ", " + mokkiId + ", " + asiakasId + ", " + hinta + ", " + vAloitus + ", " + vLopetus + ", " + luontiP;
+        return "Varaus id: "+ varausId + ", mökki id: " + mokkiId + ", asiakas id: " + asiakasId + ", hinta: " + hinta + ", varaus aloitus: " + vAloitus + ", varaus lopetus: " + vLopetus + ", luonti päivä: " + luontiP;
     }
 
 

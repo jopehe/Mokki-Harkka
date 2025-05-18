@@ -49,7 +49,7 @@ public class CreateMYSQL extends Application {
     /**
      * Luodaan uusi "mokki_database" database sekä kaikki taulut joita siihen kuuluu
      */
-    public void createDatabase(){
+    public static void createDatabase(){
         try{
             /// Haetaan osoite mysql juureen johon uusi tietokanta voidaan luoda
             DatabaseConnection connection = new DatabaseConnection();
@@ -128,10 +128,12 @@ public class CreateMYSQL extends Application {
                     "username VARCHAR(30) NOT NULL,"+
                     "password VARCHAR(20) NOT NULL)";
             dbStatement.executeUpdate(createUserTable);
-
-
-
             databaseConnection.close();
+
+
+
+
+
 
         }catch (Exception E){
             System.out.println("Error trying to create database: " + E);
