@@ -72,31 +72,6 @@ public class VarausKomennot {
 
 
 
-    public static void createLasku(int varaus, java.sql.Date luontiPvm, java.sql.Date eraPvm, String ytun, String viitenum, double hinta, boolean maksettu){
-        try {
-            String sql = "INSERT INTO lasku (varaus_id, luonti_pvm, era_pvm, y_tunnus, viitenumero, hinta, maksettu) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            DatabaseConnection connection = new DatabaseConnection();
-            Connection dbconection = connection.getDatabaseConnection();
-            PreparedStatement statement = dbconection.prepareStatement(sql);
-
-            statement.setInt(1, varaus);
-            statement.setDate(2, luontiPvm);
-            statement.setDate(3, eraPvm);
-            statement.setString(4, ytun);
-            statement.setString(5, viitenum);
-            statement.setDouble(6, hinta);
-            statement.setBoolean(7, maksettu);
-
-            statement.executeUpdate();
-            dbconection.close();
-
-            System.out.println("Lasku lisätty varaukselle id=" + varaus);
-
-        } catch (Exception E){
-            System.out.println("Error creating new lasku: " + E);
-        }
-    }
-
     /// POISTA VARAUS
     public static void poistaVaraus(int id){
         try{
